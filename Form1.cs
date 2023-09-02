@@ -52,13 +52,13 @@ namespace Aerotec
         private void TextBox5_TextChanged(object sender, EventArgs e)
         {
 
-            TextBox2.Text = TextBox5.Text;
+            TextBox2.Text = ANRTextBox.Text;
 
         }
 
         private void TextBox6_TextChanged(object sender, EventArgs e)
         {
-            TextBox1.Text = TextBox6.Text;
+            TextBox1.Text = HTZTextBox.Text;
         }
 
         private void Button7_Click(object sender, EventArgs e)
@@ -67,27 +67,27 @@ namespace Aerotec
             switch (ComboBox2.Text)
             {
                 case "ALECU":
-                    TextBox4.Text = "B 115";
+                    ControllerIdTextBox.Text = "B 115";
                     break;
 
                 case "DOHOTARU":
-                    TextBox4.Text = "B 093";
+                    ControllerIdTextBox.Text = "B 093";
                     break;
 
                 case "BACIU":
-                    TextBox4.Text = "B 041";
+                    ControllerIdTextBox.Text = "B 041";
                     break;
 
                 case "NEGOESCU":
-                    TextBox4.Text = "B 110";
+                    ControllerIdTextBox.Text = "B 110";
                     break;
 
                 case "POENARIU":
-                    TextBox4.Text = "B 105";
+                    ControllerIdTextBox.Text = "B 105";
                     break;
 
                 case "CIREASA":
-                    TextBox4.Text = "B 066";
+                    ControllerIdTextBox.Text = "B 066";
                     break;
 
                 default:
@@ -100,7 +100,7 @@ namespace Aerotec
 
             TCPCLIENT = new System.Net.Sockets.TcpClient(TextBox14.Text, 3000);
             TCPCLIENTSTREAM = TCPCLIENT.GetStream();
-            TextBox15.Text = ComboBox2.Text;
+            ControllerTextBox.Text = ComboBox2.Text;
             TextBox16.BackColor = Color.LimeGreen;
             Timer1.Enabled = true;
             Timer2.Enabled = true;
@@ -113,17 +113,17 @@ namespace Aerotec
 
         private void TextBox8_TextChanged(object sender, EventArgs e)
         {
-            TextBox7.Text = TextBox8.Text;
+            TextBox7.Text = BTIDTextBox.Text;
         }
 
         private void TextBox4_TextChanged(object sender, EventArgs e)
         {
-            TextBox18.Text = TextBox4.Text;
+            TextBox18.Text = ControllerIdTextBox.Text;
         }
 
         private void Button3_Click(object sender, EventArgs e)
         {
-            Button3.BackColor = Color.Lime;
+            StartProductionButton.BackColor = Color.Lime;
             if (SizeStandardChkBox.Checked == true)
             {
 
@@ -132,11 +132,11 @@ namespace Aerotec
                                      + "^0*JLPAR [ 90 1 0 3 1000 180 0 30000 00:00 0 30000 0 0 1000 0]" + Constants.vbCrLf
                                      + "^0*BEGINJOB [ 0 () ]" + Constants.vbCrLf
                                      + "^0*JOBPAR [ 2000 0 0 420 0 0 0 1 1 0 -1 () 1 1 55000 0 16 0 1 0 100 0 1 0 ]" + Constants.vbCrLf
-                                     + "^0*OBJ [1 0 13 0 (ISO1_7x5)  (" + TextBox6.Text + " ) 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [1 0 13 0 (ISO1_7x5)  (" + HTZTextBox.Text + " ) 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
                                      + "^0*OBJ [2 168 13 0 (ISO1_7x5)  (PA) 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [3 0 0 0 (ISO1_7x5)  (" + TextBox5.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [4 131 0 0 (ISO1_7x5)  (" + TextBox8.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [5 163 1 0 (ISO1_7x5)  (" + TextBox4.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [3 0 0 0 (ISO1_7x5)  (" + ANRTextBox.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [4 131 0 0 (ISO1_7x5)  (" + BTIDTextBox.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [5 163 1 0 (ISO1_7x5)  (" + ControllerIdTextBox.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
                                      + "^0*ENDJOB []" + Constants.vbCrLf
                                      + "^0*ENDLJSCRIPT []" + Constants.vbCrLf
                                     );
@@ -151,11 +151,11 @@ namespace Aerotec
                                      + "^0*JLPAR [ 60 1 0 3 10 180 0 30000 00:00 0 30000 0 0 1000 0]" + Constants.vbCrLf
                                      + "^0*BEGINJOB [ 0 () ]" + Constants.vbCrLf
                                      + "^0*JOBPAR [ 2000 0 0 280 0 0 0 1 1 0 -1 () 1 1 55000 0 9 0 1 0 100 0 1 0 ]" + Constants.vbCrLf
-                                     + "^0*OBJ [1 0 11 0 (ISO1_7x5)  (" + TextBox6.Text + " ) 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [1 0 11 0 (ISO1_7x5)  (" + HTZTextBox.Text + " ) 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
                                      + "^0*OBJ [2 89 11 0 (ISO1_7x5)  (PA) 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [3 0 0 0 (ISO1_7x5)  (" + TextBox5.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [4 64 0 0 (ISO1_7x5)  (" + TextBox8.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [5 87 0 0 (ISO1_7x5)  (" + TextBox4.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [3 0 0 0 (ISO1_7x5)  (" + ANRTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [4 64 0 0 (ISO1_7x5)  (" + BTIDTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [5 87 0 0 (ISO1_7x5)  (" + ControllerIdTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
                                      + "^0*ENDJOB []" + Constants.vbCrLf
                                      + "^0*ENDLJSCRIPT []" + Constants.vbCrLf
                                     );
@@ -169,11 +169,11 @@ namespace Aerotec
                                      + "^0*JLPAR [ 90 1 0 3 1000 180 0 30000 00:00 0 30000 0 0 1000 0]" + Constants.vbCrLf
                                      + "^0*BEGINJOB [ 0 () ]" + Constants.vbCrLf
                                      + "^0*JOBPAR [ 2000 0 0 380 0 0 0 1 1 0 -1 () 1 1 55000 0 21 0 1 0 100 0 1 0 ]" + Constants.vbCrLf
-                                     + "^0*OBJ [1 0 16 0 (ISO1_9x7)  (" + TextBox6.Text + " ) 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [1 0 16 0 (ISO1_9x7)  (" + HTZTextBox.Text + " ) 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
                                      + "^0*OBJ [2 251 16 0 (ISO1_9x7)  (PA) 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [3 0 0 0 (ISO1_9x7)  (" + TextBox5.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [4 176 0 0 (ISO1_9x7)  (" + TextBox8.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [5 242 0 0 (ISO1_9x7)  (" + TextBox4.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [3 0 0 0 (ISO1_9x7)  (" + ANRTextBox.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [4 176 0 0 (ISO1_9x7)  (" + BTIDTextBox.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [5 242 0 0 (ISO1_9x7)  (" + ControllerIdTextBox.Text + ") 1 0 0 0 0 1 1 2 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
                                      + "^0*ENDJOB []" + Constants.vbCrLf
                                      + "^0*ENDLJSCRIPT []" + Constants.vbCrLf
                                     );
@@ -229,10 +229,10 @@ namespace Aerotec
 
         private void Button4_Click(object sender, EventArgs e)
         {
-            Button3.BackColor = Color.Gray;
-            TextBox5.ResetText();
-            TextBox6.ResetText();
-            TextBox8.ResetText();
+            StartProductionButton.BackColor = Color.Gray;
+            ANRTextBox.ResetText();
+            HTZTextBox.ResetText();
+            BTIDTextBox.ResetText();
             ExpectedQuantityTxtBox.ResetText();
 
         }
