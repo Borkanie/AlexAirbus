@@ -381,9 +381,9 @@ Partial Class Form1
         Me.Panel1.Controls.Add(Me.ComboBox2)
         Me.Panel1.Controls.Add(Me.Label17)
         Me.Panel1.Controls.Add(Me.ShapeContainer2)
-        Me.Panel1.Location = New System.Drawing.Point(0, 603)
+        Me.Panel1.Location = New System.Drawing.Point(0, 23)
         Me.Panel1.Name = "Panel1"
-        Me.Panel1.Size = New System.Drawing.Size(234, 146)
+        Me.Panel1.Size = New System.Drawing.Size(500, 500)
         Me.Panel1.TabIndex = 24
         '
         'PictureBox5
@@ -613,6 +613,7 @@ Partial Class Form1
         Me.Panel1.PerformLayout()
         CType(Me.PictureBox5, System.ComponentModel.ISupportInitialize).EndInit()
         Me.ResumeLayout(False)
+        Me.Button7.Visible = True
         Me.PerformLayout()
 
     End Sub

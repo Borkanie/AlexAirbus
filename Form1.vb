@@ -6,18 +6,29 @@ Imports System.Threading
 Imports System.Text
 Imports System.Media
 
-
-
-
-
-
 Public Class Form1
     Dim TCPCLIENT As Sockets.TcpClient
     Dim TCPCLIENTSTREAM As Sockets.NetworkStream
-
     Private Sub Form1_Load(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles MyBase.Load
-
         Label3.Text = DateTime.Now.ToString("dd/MM/yyy")
+
+        ' Dock Panel1 to fill the form
+        Panel1.Dock = DockStyle.Fill
+
+        ' Adjust the size of the form to match its size
+        AutoSize = True
+        Panel1.BringToFront()
+        ' Hide all controls except Panel1 and its children
+        For Each control As Control In Me.Controls
+            If control IsNot Panel1 Or
+                control.Parent IsNot Panel1 Then
+                control.Visible = False
+            End If
+        Next
+
+        ' Show the controls you want to be visible initially
+        Panel1.Visible = True
+        Me.Visible = True
 
     End Sub
 
@@ -30,31 +41,44 @@ Public Class Form1
         TextBox1.Text = TextBox6.Text
     End Sub
 
+    Private Sub TextBox8_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox8.TextChanged
+        TextBox7.Text = TextBox8.Text
+    End Sub
+
+    Private Sub TextBox4_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox4.TextChanged
+        TextBox18.Text = TextBox4.Text
+    End Sub
+
     Private Sub Button7_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button7.Click
 
-        If ComboBox2.Text = "ALECU" Then
-            TextBox4.Text = "B 115"
+        Select Case ComboBox2.Text
+            Case "ALECU"
+                TextBox4.Text = "B 115"
+            Case "DOHOTARU"
+                TextBox4.Text = "B 093"
+            Case "BACIU"
+                TextBox4.Text = "B 041"
+            Case "NEGOESCU"
+                TextBox4.Text = "B 110"
+            Case "POENARIU"
+                TextBox4.Text = "B 105"
+            Case "CIREASA"
+                TextBox4.Text = "B 066"
+            Case Else
+                MessageBox.Show("VA RUGAM SELECTATI UN CONTROLOR")
+                Panel1.Visible = True
+                Return
+        End Select
 
-        End If
-        If ComboBox2.Text = "DOHOTARU" Then
-            TextBox4.Text = "B 093"
-        End If
-        If ComboBox2.Text = "BACIU" Then
-            TextBox4.Text = "B 041"
-        End If
-        If ComboBox2.Text = "NEGOESCU" Then
-            TextBox4.Text = "B 110"
-        End If
-        If ComboBox2.Text = "POENARIU" Then
-            TextBox4.Text = "B 105"
-        End If
-        If ComboBox2.Text = "CIREASA" Then
-            TextBox4.Text = "B 066"
-        End If
-        If ComboBox2.Text = "" Then
-            MessageBox.Show("VA RUGAM SELECTATI UN CONTROLOR")
-            Panel1.Visible = True
-        End If
+        ' Hide all controls except Panel1 and its children
+        For Each control As Control In Me.Controls
+            If control IsNot Panel1 Or
+                control.Parent IsNot Panel1 Then
+                control.Visible = True
+            End If
+        Next
+
+        Me.Panel1.Visible = False
 
 
         TCPCLIENT = New Sockets.TcpClient(TextBox14.Text, 3000)
@@ -66,17 +90,6 @@ Public Class Form1
 
 
     End Sub
-
-
-
-    Private Sub TextBox8_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox8.TextChanged
-        TextBox7.Text = TextBox8.Text
-    End Sub
-
-    Private Sub TextBox4_TextChanged(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles TextBox4.TextChanged
-        TextBox18.Text = TextBox4.Text
-    End Sub
-
     Private Sub Button3_Click(ByVal sender As System.Object, ByVal e As System.EventArgs) Handles Button3.Click
         Button3.BackColor = Color.Lime
         If CheckBox3.Checked = True Then
