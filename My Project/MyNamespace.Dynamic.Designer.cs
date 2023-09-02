@@ -10,9 +10,9 @@ namespace Aerotec.My
         {
 
             [EditorBrowsable(EditorBrowsableState.Never)]
-            public Form1 m_Form1;
+            public MainForm m_Form1;
 
-            public Form1 Form1
+            public MainForm Form1
             {
                 [DebuggerHidden]
                 get

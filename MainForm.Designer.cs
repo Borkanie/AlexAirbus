@@ -6,7 +6,7 @@ using System.Windows.Forms;
 namespace Aerotec
 {
     [Microsoft.VisualBasic.CompilerServices.DesignerGenerated()]
-    public partial class Form1 : Form
+    public partial class MainForm : Form
     {
 
         // Form overrides dispose to clean up the component list.
@@ -36,7 +36,7 @@ namespace Aerotec
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
             Aerotec.My.MySettings mySettings1 = new Aerotec.My.MySettings();
             this.AerotecLogoPicture = new System.Windows.Forms.PictureBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
@@ -110,6 +110,7 @@ namespace Aerotec
             this.AerotecLogoPicture.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.AerotecLogoPicture.TabIndex = 0;
             this.AerotecLogoPicture.TabStop = false;
+            this.AerotecLogoPicture.Click += new System.EventHandler(this.AerotecLogoPicture_Click);
             // 
             // GroupBox1
             // 
@@ -600,7 +601,7 @@ namespace Aerotec
             this.Label8.TabIndex = 32;
             this.Label8.Text = "SELECTATI MARIMEA DORITA:";
             // 
-            // Form1
+            // MainForm
             // 
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.None;
             this.BackColor = System.Drawing.Color.White;
@@ -635,7 +636,7 @@ namespace Aerotec
             this.Controls.Add(this.SizeSmallChkBox);
             this.Controls.Add(this.Label8);
             this.Controls.Add(this.ShapeContainer1);
-            this.Name = "Form1";
+            this.Name = "MainForm";
             this.Text = "Form1";
             this.Load += new System.EventHandler(this.Form1_Load);
             ((System.ComponentModel.ISupportInitialize)(this.AerotecLogoPicture)).EndInit();

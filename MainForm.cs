@@ -6,12 +6,12 @@ using System.Windows.Forms;
 
 namespace Aerotec
 {
-    public partial class Form1
+    public partial class MainForm
     {
         private System.Net.Sockets.TcpClient TCPCLIENT;
         private System.Net.Sockets.NetworkStream TCPCLIENTSTREAM;
 
-        public Form1()
+        public MainForm()
         {
             InitializeComponent();
         }
@@ -237,8 +237,9 @@ namespace Aerotec
 
         }
 
+        private void AerotecLogoPicture_Click(object sender, EventArgs e)
+        {
 
-
-
+        }
     }
 }
