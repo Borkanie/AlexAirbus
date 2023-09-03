@@ -241,5 +241,10 @@ namespace Aerotec
         {
 
         }
+
+        private void ContactInformationLabel_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }

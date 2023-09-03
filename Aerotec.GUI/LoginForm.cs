@@ -1,23 +1,27 @@
 using Aerotec.Data;
+using Aerotec.Data.Factories;
+using Aerotec.Data.Model;
+using System.Linq;
 using System.Net;
 
 namespace Aerotec.GUI
 {
     public partial class LoginForm : Form
     {
+        private List<string> comboBoxNames;
         public LoginForm()
         {
             InitializeComponent();
-            LoginUserComboBox.DataSource = new List<string>()
-            {
-            "ALECU",
-            "DOHOTARU",
-            "BACIU",
-            "NEGOESCU",
-            "POENARIU",
-            "CIREASA"
-            };
+
+            // Initialize the ComboBox with some initial data (if needed)
+            comboBoxNames = UserFactory.GetUserNames();
+
+            // Assign the DataSource
+            LoginUserComboBox.DataSource = comboBoxNames;
+
+            // Setup keyu press event handler to deal with Not number characters
             LogInIPTextBox.KeyPress += LogInIPTextBox_KeyPress;
+
             // Set the form's border style to FixedSingle
             FormBorderStyle = FormBorderStyle.FixedSingle;
 
@@ -27,7 +31,7 @@ namespace Aerotec.GUI
             LoginUserComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
-        private void LoginButton_Click(object sender, EventArgs e)
+        private void LoginButton_Click(object? sender, EventArgs e)
         {
             if(LoginUserComboBox.SelectedItem == null)
             {
@@ -39,7 +43,9 @@ namespace Aerotec.GUI
                 MessageBox.Show("Adresa IP a utilajului nu este corecta");
                 return;
             }
-            var logInInfo = new LogInInformation(LoginUserComboBox.SelectedItem.ToString(),LogInIPTextBox.Text);
+            var logInInfo = new LogInInformation(
+                UserFactory.GetUsers().First( x=> string.Equals(x.Name, LoginUserComboBox.SelectedItem.ToString())),
+                LogInIPTextBox.Text);
             var mainForm = new MainForm(logInInfo);
             mainForm.FormClosed += MainForm_FormClosed;
             Visible = false;

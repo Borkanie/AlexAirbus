@@ -5,13 +5,13 @@ using System.Net;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Aerotec.Data
+namespace Aerotec.Data.Model
 {
     public class LogInInformation
     {
-        public LogInInformation(string name, string ip)
+        public LogInInformation(User user, string ip)
         {
-            User = new User(name);
+            User = user;
             Address = IPAddress.Parse(ip);
         }
         public User User { get; }
