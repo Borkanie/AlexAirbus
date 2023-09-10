@@ -33,7 +33,7 @@
             DataANRTextBox = new TextBox();
             DataBTIDTextBox = new TextBox();
             DataControllerIdTextBox = new TextBox();
-            textBox3 = new TextBox();
+            SignatureTextBox = new TextBox();
             textBox2 = new TextBox();
             DataHTZTextBox = new TextBox();
             groupBox2 = new GroupBox();
@@ -50,6 +50,8 @@
             ANRTextBox = new TextBox();
             label6 = new Label();
             groupBox4 = new GroupBox();
+            label8 = new Label();
+            CurrentQuantityTextBox = new TextBox();
             SizeComboBox = new ComboBox();
             ExpectedQuantityTxtBox = new TextBox();
             label7 = new Label();
@@ -70,57 +72,70 @@
             INFORMATI.Controls.Add(DataANRTextBox);
             INFORMATI.Controls.Add(DataBTIDTextBox);
             INFORMATI.Controls.Add(DataControllerIdTextBox);
-            INFORMATI.Controls.Add(textBox3);
+            INFORMATI.Controls.Add(SignatureTextBox);
             INFORMATI.Controls.Add(textBox2);
             INFORMATI.Controls.Add(DataHTZTextBox);
             INFORMATI.Location = new Point(27, 13);
             INFORMATI.Name = "INFORMATI";
-            INFORMATI.Size = new Size(305, 134);
+            INFORMATI.Size = new Size(332, 134);
             INFORMATI.TabIndex = 0;
             INFORMATI.TabStop = false;
-            INFORMATI.Text = "groupBox1";
+            INFORMATI.Text = "PREVIZUALIZARE:";
             // 
             // DataANRTextBox
             // 
             DataANRTextBox.Location = new Point(14, 63);
             DataANRTextBox.Name = "DataANRTextBox";
+            DataANRTextBox.ReadOnly = true;
             DataANRTextBox.Size = new Size(115, 27);
             DataANRTextBox.TabIndex = 5;
+            DataANRTextBox.TextAlign = HorizontalAlignment.Center;
             // 
             // DataBTIDTextBox
             // 
             DataBTIDTextBox.Location = new Point(135, 63);
             DataBTIDTextBox.Name = "DataBTIDTextBox";
+            DataBTIDTextBox.ReadOnly = true;
             DataBTIDTextBox.Size = new Size(73, 27);
             DataBTIDTextBox.TabIndex = 4;
+            DataBTIDTextBox.TextAlign = HorizontalAlignment.Center;
             // 
             // DataControllerIdTextBox
             // 
             DataControllerIdTextBox.Location = new Point(214, 63);
             DataControllerIdTextBox.Name = "DataControllerIdTextBox";
-            DataControllerIdTextBox.Size = new Size(85, 27);
+            DataControllerIdTextBox.ReadOnly = true;
+            DataControllerIdTextBox.Size = new Size(112, 27);
             DataControllerIdTextBox.TabIndex = 3;
+            DataControllerIdTextBox.TextAlign = HorizontalAlignment.Center;
             // 
-            // textBox3
+            // SignatureTextBox
             // 
-            textBox3.Location = new Point(214, 30);
-            textBox3.Name = "textBox3";
-            textBox3.Size = new Size(85, 27);
-            textBox3.TabIndex = 2;
+            SignatureTextBox.Location = new Point(214, 30);
+            SignatureTextBox.Name = "SignatureTextBox";
+            SignatureTextBox.ReadOnly = true;
+            SignatureTextBox.Size = new Size(112, 27);
+            SignatureTextBox.TabIndex = 2;
+            SignatureTextBox.Text = "PA";
+            SignatureTextBox.TextAlign = HorizontalAlignment.Center;
             // 
             // textBox2
             // 
             textBox2.Location = new Point(14, 96);
             textBox2.Name = "textBox2";
-            textBox2.Size = new Size(285, 27);
+            textBox2.ReadOnly = true;
+            textBox2.Size = new Size(312, 27);
             textBox2.TabIndex = 1;
+            textBox2.TextAlign = HorizontalAlignment.Center;
             // 
             // DataHTZTextBox
             // 
             DataHTZTextBox.Location = new Point(14, 30);
             DataHTZTextBox.Name = "DataHTZTextBox";
+            DataHTZTextBox.ReadOnly = true;
             DataHTZTextBox.Size = new Size(196, 27);
             DataHTZTextBox.TabIndex = 0;
+            DataHTZTextBox.TextAlign = HorizontalAlignment.Center;
             // 
             // groupBox2
             // 
@@ -130,7 +145,7 @@
             groupBox2.Controls.Add(ControllerTextBox);
             groupBox2.Location = new Point(27, 170);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(299, 114);
+            groupBox2.Size = new Size(332, 114);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "UTILIZATOR";
@@ -155,15 +170,17 @@
             // 
             // ControllerIdTextBox
             // 
-            ControllerIdTextBox.Location = new Point(135, 69);
+            ControllerIdTextBox.Location = new Point(168, 69);
             ControllerIdTextBox.Name = "ControllerIdTextBox";
+            ControllerIdTextBox.ReadOnly = true;
             ControllerIdTextBox.Size = new Size(158, 27);
             ControllerIdTextBox.TabIndex = 4;
             // 
             // ControllerTextBox
             // 
-            ControllerTextBox.Location = new Point(135, 36);
+            ControllerTextBox.Location = new Point(168, 33);
             ControllerTextBox.Name = "ControllerTextBox";
+            ControllerTextBox.ReadOnly = true;
             ControllerTextBox.Size = new Size(158, 27);
             ControllerTextBox.TabIndex = 3;
             // 
@@ -177,58 +194,58 @@
             groupBox3.Controls.Add(ANRTextBox);
             groupBox3.Location = new Point(27, 313);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(293, 125);
+            groupBox3.Size = new Size(332, 125);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
-            groupBox3.Text = "INFORMATII COMANDA DE LUCRU";
+            groupBox3.Text = "COMANDA DE LUCRU";
             // 
             // label5
             // 
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label5.Location = new Point(69, 95);
+            label5.Location = new Point(26, 91);
             label5.Name = "label5";
-            label5.Size = new Size(54, 20);
+            label5.Size = new Size(142, 20);
             label5.TabIndex = 9;
-            label5.Text = "BTIDX";
+            label5.Text = "INDEX COMANDA:";
             // 
             // label4
             // 
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.Location = new Point(85, 62);
+            label4.Location = new Point(126, 58);
             label4.Name = "label4";
-            label4.Size = new Size(38, 20);
+            label4.Size = new Size(42, 20);
             label4.TabIndex = 8;
-            label4.Text = "HTZ";
+            label4.Text = "HTZ:";
             // 
             // label3
             // 
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(54, 29);
+            label3.Location = new Point(26, 26);
             label3.Name = "label3";
-            label3.Size = new Size(69, 20);
+            label3.Size = new Size(142, 20);
             label3.TabIndex = 7;
-            label3.Text = "ARN-Nr.";
+            label3.Text = "NUMAR COMADA:";
             // 
             // BTIDTextBox
             // 
-            BTIDTextBox.Location = new Point(129, 92);
+            BTIDTextBox.Location = new Point(168, 88);
             BTIDTextBox.Name = "BTIDTextBox";
             BTIDTextBox.Size = new Size(158, 27);
             BTIDTextBox.TabIndex = 6;
             // 
             // HTZTextBox
             // 
-            HTZTextBox.Location = new Point(129, 59);
+            HTZTextBox.Location = new Point(168, 55);
             HTZTextBox.Name = "HTZTextBox";
             HTZTextBox.Size = new Size(158, 27);
             HTZTextBox.TabIndex = 5;
             // 
             // ANRTextBox
             // 
-            ANRTextBox.Location = new Point(129, 26);
+            ANRTextBox.Location = new Point(168, 22);
             ANRTextBox.Name = "ANRTextBox";
             ANRTextBox.Size = new Size(158, 27);
             ANRTextBox.TabIndex = 4;
@@ -245,16 +262,36 @@
             // 
             // groupBox4
             // 
+            groupBox4.Controls.Add(label8);
+            groupBox4.Controls.Add(CurrentQuantityTextBox);
             groupBox4.Controls.Add(SizeComboBox);
             groupBox4.Controls.Add(ExpectedQuantityTxtBox);
             groupBox4.Controls.Add(label7);
             groupBox4.Controls.Add(label6);
             groupBox4.Location = new Point(393, 170);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(395, 114);
+            groupBox4.Size = new Size(395, 148);
             groupBox4.TabIndex = 4;
             groupBox4.TabStop = false;
             groupBox4.Text = "MARIMEA SI CANTITATE";
+            // 
+            // label8
+            // 
+            label8.AutoSize = true;
+            label8.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
+            label8.Location = new Point(33, 79);
+            label8.Name = "label8";
+            label8.Size = new Size(181, 17);
+            label8.TabIndex = 10;
+            label8.Text = "TOTAL PIESE COMANDA:";
+            // 
+            // CurrentQuantityTextBox
+            // 
+            CurrentQuantityTextBox.Location = new Point(220, 115);
+            CurrentQuantityTextBox.Name = "CurrentQuantityTextBox";
+            CurrentQuantityTextBox.ReadOnly = true;
+            CurrentQuantityTextBox.Size = new Size(151, 27);
+            CurrentQuantityTextBox.TabIndex = 9;
             // 
             // SizeComboBox
             // 
@@ -266,7 +303,7 @@
             // 
             // ExpectedQuantityTxtBox
             // 
-            ExpectedQuantityTxtBox.Location = new Point(220, 68);
+            ExpectedQuantityTxtBox.Location = new Point(220, 69);
             ExpectedQuantityTxtBox.Name = "ExpectedQuantityTxtBox";
             ExpectedQuantityTxtBox.Size = new Size(151, 27);
             ExpectedQuantityTxtBox.TabIndex = 7;
@@ -275,11 +312,11 @@
             // 
             label7.AutoSize = true;
             label7.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(131, 72);
+            label7.Location = new Point(86, 115);
             label7.Name = "label7";
-            label7.Size = new Size(83, 17);
+            label7.Size = new Size(128, 17);
             label7.TabIndex = 6;
-            label7.Text = "NECESAR:";
+            label7.Text = "PIESE MARCATE:";
             // 
             // pictureBox1
             // 
@@ -295,23 +332,23 @@
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
             pictureBox2.Location = new Point(393, 24);
             pictureBox2.Name = "pictureBox2";
-            pictureBox2.Size = new Size(395, 123);
+            pictureBox2.Size = new Size(395, 112);
             pictureBox2.TabIndex = 6;
             pictureBox2.TabStop = false;
             // 
             // StartStopButton
             // 
-            StartStopButton.Location = new Point(393, 354);
+            StartStopButton.Location = new Point(393, 361);
             StartStopButton.Name = "StartStopButton";
             StartStopButton.Size = new Size(157, 63);
             StartStopButton.TabIndex = 7;
-            StartStopButton.Text = "START PRODUCTIE";
+            StartStopButton.Text = "START";
             StartStopButton.UseVisualStyleBackColor = true;
             StartStopButton.Click += ExpectedQuantityTxtBox_Click;
             // 
             // ContactButton
             // 
-            ContactButton.Location = new Point(571, 354);
+            ContactButton.Location = new Point(571, 361);
             ContactButton.Name = "ContactButton";
             ContactButton.Size = new Size(86, 63);
             ContactButton.TabIndex = 8;
@@ -353,7 +390,7 @@
         private TextBox DataANRTextBox;
         private TextBox DataBTIDTextBox;
         private TextBox DataControllerIdTextBox;
-        private TextBox textBox3;
+        private TextBox SignatureTextBox;
         private TextBox textBox2;
         private TextBox DataHTZTextBox;
         private GroupBox groupBox2;
@@ -377,5 +414,7 @@
         private PictureBox pictureBox2;
         private Button StartStopButton;
         private Button ContactButton;
+        private Label label8;
+        private TextBox CurrentQuantityTextBox;
     }
 }

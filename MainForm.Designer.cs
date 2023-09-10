@@ -37,13 +37,12 @@ namespace Aerotec
         {
             this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainForm));
-            Aerotec.My.MySettings mySettings1 = new Aerotec.My.MySettings();
+            Aerotec.My.MySettings mySettings2 = new Aerotec.My.MySettings();
             this.AerotecLogoPicture = new System.Windows.Forms.PictureBox();
             this.GroupBox1 = new System.Windows.Forms.GroupBox();
             this.ContactInformationLabel = new System.Windows.Forms.Label();
             this.TextBox1 = new System.Windows.Forms.TextBox();
             this.TextBox2 = new System.Windows.Forms.TextBox();
-            this.TextBox3 = new System.Windows.Forms.TextBox();
             this.ShapeContainer1 = new Microsoft.VisualBasic.PowerPacks.ShapeContainer();
             this.RectangleShape4 = new Microsoft.VisualBasic.PowerPacks.RectangleShape();
             this.RectangleShape3 = new Microsoft.VisualBasic.PowerPacks.RectangleShape();
@@ -90,6 +89,7 @@ namespace Aerotec
             this.SizeStandardChkBox = new System.Windows.Forms.CheckBox();
             this.Label8 = new System.Windows.Forms.Label();
             this.Timer2 = new System.Windows.Forms.Timer(this.components);
+            this.TextBox3 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.AerotecLogoPicture)).BeginInit();
             this.GroupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.AircraftPicture)).BeginInit();
@@ -149,15 +149,6 @@ namespace Aerotec
             this.TextBox2.Name = "TextBox2";
             this.TextBox2.Size = new System.Drawing.Size(116, 30);
             this.TextBox2.TabIndex = 3;
-            // 
-            // TextBox3
-            // 
-            this.TextBox3.Enabled = false;
-            this.TextBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.TextBox3.Location = new System.Drawing.Point(15, 100);
-            this.TextBox3.Name = "TextBox3";
-            this.TextBox3.Size = new System.Drawing.Size(272, 30);
-            this.TextBox3.TabIndex = 4;
             // 
             // ShapeContainer1
             // 
@@ -423,16 +414,16 @@ namespace Aerotec
             // TextBox14
             // 
             this.TextBox14.BackColor = System.Drawing.Color.Lime;
-            mySettings1.a = true;
-            mySettings1.pr = "standard";
-            mySettings1.SettingsKey = "";
-            mySettings1.t1 = "192.168.127.254";
-            this.TextBox14.DataBindings.Add(new System.Windows.Forms.Binding("Text", mySettings1, "t1", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
+            mySettings2.a = true;
+            mySettings2.pr = "standard";
+            mySettings2.SettingsKey = "";
+            mySettings2.t1 = "192.168.127.254";
+            this.TextBox14.DataBindings.Add(new System.Windows.Forms.Binding("Text", mySettings2, "t1", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.TextBox14.Location = new System.Drawing.Point(304, 46);
             this.TextBox14.Name = "TextBox14";
             this.TextBox14.Size = new System.Drawing.Size(100, 22);
             this.TextBox14.TabIndex = 5;
-            this.TextBox14.Text = mySettings1.t1;
+            this.TextBox14.Text = mySettings2.t1;
             // 
             // Button7
             // 
@@ -579,9 +570,7 @@ namespace Aerotec
             // SizeStandardChkBox
             // 
             this.SizeStandardChkBox.AutoSize = true;
-            this.SizeStandardChkBox.Checked = mySettings1.a;
             this.SizeStandardChkBox.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.SizeStandardChkBox.DataBindings.Add(new System.Windows.Forms.Binding("Checked", mySettings1, "a", true, System.Windows.Forms.DataSourceUpdateMode.OnPropertyChanged));
             this.SizeStandardChkBox.Location = new System.Drawing.Point(431, 280);
             this.SizeStandardChkBox.Name = "SizeStandardChkBox";
             this.SizeStandardChkBox.Size = new System.Drawing.Size(105, 20);
@@ -600,6 +589,15 @@ namespace Aerotec
             this.Label8.Size = new System.Drawing.Size(233, 17);
             this.Label8.TabIndex = 32;
             this.Label8.Text = "SELECTATI MARIMEA DORITA:";
+            // 
+            // TextBox3
+            // 
+            this.TextBox3.Enabled = false;
+            this.TextBox3.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.TextBox3.Location = new System.Drawing.Point(15, 100);
+            this.TextBox3.Name = "TextBox3";
+            this.TextBox3.Size = new System.Drawing.Size(272, 30);
+            this.TextBox3.TabIndex = 4;
             // 
             // MainForm
             // 
@@ -661,7 +659,6 @@ namespace Aerotec
         internal Label ContactInformationLabel;
         internal TextBox TextBox1;
         internal TextBox TextBox2;
-        internal TextBox TextBox3;
         internal Microsoft.VisualBasic.PowerPacks.ShapeContainer ShapeContainer1;
         internal Microsoft.VisualBasic.PowerPacks.RectangleShape RectangleShape1;
         internal PictureBox AircraftPicture;
@@ -708,6 +705,6 @@ namespace Aerotec
         internal Microsoft.VisualBasic.PowerPacks.RectangleShape RectangleShape2;
         internal Timer Timer2;
         internal Microsoft.VisualBasic.PowerPacks.RectangleShape RectangleShape4;
-
+        internal TextBox TextBox3;
     }
 }

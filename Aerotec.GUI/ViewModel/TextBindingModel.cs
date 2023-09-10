@@ -7,11 +7,11 @@ using System.Threading.Tasks;
 
 namespace Aerotec.GUI.ViewModel
 {
-    public class MyDataModel : INotifyPropertyChanged
+    public class TextBindingModel : INotifyPropertyChanged
     {
         private string _myTextProperty;
 
-        public string MyTextProperty
+        public string Content
         {
             get { return _myTextProperty; }
             set
@@ -19,7 +19,7 @@ namespace Aerotec.GUI.ViewModel
                 if (_myTextProperty != value)
                 {
                     _myTextProperty = value;
-                    OnPropertyChanged(nameof(MyTextProperty));
+                    OnPropertyChanged(nameof(Content));
                 }
             }
         }
