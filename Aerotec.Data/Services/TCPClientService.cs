@@ -26,6 +26,9 @@ namespace Aerotec.Data.Services
         private FontSizeEnum fontSizeEnum;
         private TcpClient client;
         private NetworkStream tcpClientStream;
+
+        public event EventHandler<Jet3UpMessageHendlerEventArgs> Jet3UpMessageHendler;
+
         public bool Connect(string Ip, int timeout)
         {
             client = new TcpClient(Ip, timeout);
@@ -74,6 +77,7 @@ namespace Aerotec.Data.Services
             Send("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999" + Constants.vbCrLf);
             Send("^0!EQ" + Constants.vbCrLf);
         }
+
 
         public void StopCommand()
         {

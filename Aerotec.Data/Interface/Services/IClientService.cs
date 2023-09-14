@@ -20,5 +20,7 @@ namespace Aerotec.Data.Interface.Services
         public bool IsConnected();
 
         public void StopCommand();
+
+        public event EventHandler<Jet3UpMessageHendlerEventArgs> Jet3UpMessageHendler;
     }
 }

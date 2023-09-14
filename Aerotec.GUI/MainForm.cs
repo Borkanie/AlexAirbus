@@ -2,6 +2,7 @@
 using Aerotec.Data.Helper;
 using Aerotec.Data.Interface.Services;
 using Aerotec.Data.Model;
+using Aerotec.Data.Resources;
 using Aerotec.Data.Services;
 using Aerotec.GUI.Resources.Helper;
 using Aerotec.GUI.ViewModel;
@@ -13,6 +14,7 @@ using System.Data;
 using System.Drawing;
 using System.Linq;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -54,10 +56,24 @@ namespace Aerotec.GUI
 
             }
             else
-            {
+            {                
                 jet3UpClientService = new TCPMockUpClient();
             }
             jet3UpClientService.Connect(logInInfo.Address.ToString(), 3000);
+            jet3UpClientService.Jet3UpMessageHendler += Jet3UpMessageHandler;
+        }
+
+        private void Jet3UpMessageHandler(object? sender, Jet3UpMessageHendlerEventArgs e)
+        {
+            if(e.Type == Jet3UpStatusMessageType.Error)
+            {
+                MessageBox.Show(e.Message,"Error",MessageBoxButtons.OK, MessageBoxIcon.Error);
+                StopWriting();
+            }
+            else
+            {
+                CurrentQuantityTextBox.Text = (int.Parse(CurrentQuantityTextBox.Text) + 1).ToString();
+            }
         }
 
         private void PrintedQuantityTextBox_TextChanged(object? sender, EventArgs e)
