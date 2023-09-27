@@ -9,6 +9,7 @@ namespace Aerotec.Data.Resources
     public enum Jet3UpStatusMessageType
     {
         Marked,
-        Error
+        Error,
+        Done
     }
 }

@@ -13,54 +13,58 @@ namespace Aerotec.Data.Services
     public class TCPMockUpClient : IClientService
     {
         private TCPMockUpClient tcpMockUpClient;
-        private ConsoleInputWatcher watcher;
+        private FileInterface fileInterface;
 
         public event EventHandler<Jet3UpMessageHendlerEventArgs> Jet3UpMessageHendler;
 
         public TCPMockUpClient()
         {
-            // In your WPF code behind or wherever you want to show the console:
-
-            // Call AllocConsole to create a new console window
-            ConsoleHelper.AllocConsole();
-            watcher = new ConsoleInputWatcher(); 
-            watcher.OnConsoleInputReceived += Watcher_OnConsoleInputReceived;
+            fileInterface = new FileInterface();
+            fileInterface.TextReaderEvent += FileInterface_TextReaderEvent;
         }
 
-        private void Watcher_OnConsoleInputReceived(string input)
+        private void FileInterface_TextReaderEvent(object? sender, ReadMEssageEventArg e)
         {
-            if (input != "error")
+            
+            if (e.Text.Contains("error"))
             {
-                Jet3UpMessageHendler?.Invoke(this,new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Error, input));
+                Jet3UpMessageHendler?.Invoke(this, new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Error, "error"));
+                return;
             }
-            else
+            if(e.Text.Contains("write"))
             {
-                Jet3UpMessageHendler?.Invoke(this, new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Marked, input));
+                Jet3UpMessageHendler?.Invoke(this, new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Marked, "one more"));
+                return;
             }
+            Jet3UpMessageHendler?.Invoke(this, new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Done, "done"));
         }
 
         public bool Connect(string Ip, int timeout)
         {
             if(tcpMockUpClient == null)
                 tcpMockUpClient = new TCPMockUpClient();
-            watcher.WriteLine("Connect method called with IP: " + Ip + " and timeout: " + timeout);
+            fileInterface.Write("Connect method called with IP: " + Ip + " and timeout: " + timeout);
             return true;
         }
 
         public void ContinueWriting()
         {
-            watcher.WriteLine("ContinueWriting method called");
+            fileInterface.Write("ContinueWriting method called");
         }
 
         public bool IsConnected()
         {
-            watcher.WriteLine("IsConnected method called");
+            fileInterface.Write("IsConnected method called");
             return true;
         }
 
-        public void Send(string text)
+        public void Send(string text, bool final = false)
         {
-            watcher.WriteLine("Send method called with text: " + text);
+            fileInterface.Write("Send method called with text: " + text);
+            if(final)
+            {
+                fileInterface.FinalizeReading();            
+            }
         }
 
         public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity)
@@ -70,11 +74,13 @@ namespace Aerotec.Data.Services
             Send(message);
             Send("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999" + Constants.vbCrLf);
             Send("^0!EQ" + Constants.vbCrLf);
+            fileInterface.StartReading(expectedQuantity);
         }
 
         public void StopCommand()
         {
-            watcher.WriteLine("StopCommand method called");
+            fileInterface.StopReading();
+            fileInterface.Write("StopCommand method called");
         }
     }
 }

@@ -11,6 +11,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Page Include="Helper\jet3up.in">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Page>
+  </ItemGroup>
+
+  <ItemGroup>
     <None Update="Resources\Controllers.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>

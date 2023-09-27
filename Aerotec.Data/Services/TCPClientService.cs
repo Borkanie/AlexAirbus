@@ -46,7 +46,7 @@ namespace Aerotec.Data.Services
             return client != null;
         }
 
-        public void Send(string text)
+        public void Send(string text, bool final = false)
         {
             if(IsConnected())
             {

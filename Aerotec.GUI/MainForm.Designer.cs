@@ -69,6 +69,8 @@
             // 
             // INFORMATI
             // 
+            INFORMATI.Anchor = AnchorStyles.Top;
+            INFORMATI.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             INFORMATI.Controls.Add(DataANRTextBox);
             INFORMATI.Controls.Add(DataBTIDTextBox);
             INFORMATI.Controls.Add(DataControllerIdTextBox);
@@ -77,7 +79,7 @@
             INFORMATI.Controls.Add(DataHTZTextBox);
             INFORMATI.Location = new Point(27, 13);
             INFORMATI.Name = "INFORMATI";
-            INFORMATI.Size = new Size(332, 134);
+            INFORMATI.Size = new Size(332, 149);
             INFORMATI.TabIndex = 0;
             INFORMATI.TabStop = false;
             INFORMATI.Text = "PREVIZUALIZARE:";
@@ -111,7 +113,7 @@
             // 
             // SignatureTextBox
             // 
-            SignatureTextBox.Location = new Point(214, 30);
+            SignatureTextBox.Location = new Point(214, 23);
             SignatureTextBox.Name = "SignatureTextBox";
             SignatureTextBox.ReadOnly = true;
             SignatureTextBox.Size = new Size(112, 27);
@@ -130,28 +132,31 @@
             // 
             // DataHTZTextBox
             // 
-            DataHTZTextBox.Location = new Point(14, 30);
+            DataHTZTextBox.Location = new Point(14, 23);
             DataHTZTextBox.Name = "DataHTZTextBox";
             DataHTZTextBox.ReadOnly = true;
-            DataHTZTextBox.Size = new Size(196, 27);
+            DataHTZTextBox.Size = new Size(194, 27);
             DataHTZTextBox.TabIndex = 0;
             DataHTZTextBox.TextAlign = HorizontalAlignment.Center;
             // 
             // groupBox2
             // 
+            groupBox2.Anchor = AnchorStyles.Left;
+            groupBox2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             groupBox2.Controls.Add(label2);
             groupBox2.Controls.Add(label1);
             groupBox2.Controls.Add(ControllerIdTextBox);
             groupBox2.Controls.Add(ControllerTextBox);
             groupBox2.Location = new Point(27, 170);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(332, 114);
+            groupBox2.Size = new Size(332, 122);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "UTILIZATOR";
             // 
             // label2
             // 
+            label2.Anchor = AnchorStyles.Left;
             label2.AutoSize = true;
             label2.Location = new Point(102, 72);
             label2.Name = "label2";
@@ -161,6 +166,7 @@
             // 
             // label1
             // 
+            label1.Anchor = AnchorStyles.Left;
             label1.AutoSize = true;
             label1.Location = new Point(32, 39);
             label1.Name = "label1";
@@ -170,6 +176,7 @@
             // 
             // ControllerIdTextBox
             // 
+            ControllerIdTextBox.Anchor = AnchorStyles.Left;
             ControllerIdTextBox.Location = new Point(168, 69);
             ControllerIdTextBox.Name = "ControllerIdTextBox";
             ControllerIdTextBox.ReadOnly = true;
@@ -178,6 +185,7 @@
             // 
             // ControllerTextBox
             // 
+            ControllerTextBox.Anchor = AnchorStyles.Left;
             ControllerTextBox.Location = new Point(168, 33);
             ControllerTextBox.Name = "ControllerTextBox";
             ControllerTextBox.ReadOnly = true;
@@ -186,24 +194,27 @@
             // 
             // groupBox3
             // 
+            groupBox3.Anchor = AnchorStyles.Bottom | AnchorStyles.Left;
+            groupBox3.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             groupBox3.Controls.Add(label5);
             groupBox3.Controls.Add(label4);
             groupBox3.Controls.Add(label3);
             groupBox3.Controls.Add(BTIDTextBox);
             groupBox3.Controls.Add(HTZTextBox);
             groupBox3.Controls.Add(ANRTextBox);
-            groupBox3.Location = new Point(27, 313);
+            groupBox3.Location = new Point(27, 299);
             groupBox3.Name = "groupBox3";
-            groupBox3.Size = new Size(332, 125);
+            groupBox3.Size = new Size(332, 139);
             groupBox3.TabIndex = 2;
             groupBox3.TabStop = false;
             groupBox3.Text = "COMANDA DE LUCRU";
             // 
             // label5
             // 
+            label5.Anchor = AnchorStyles.Left;
             label5.AutoSize = true;
             label5.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label5.Location = new Point(26, 91);
+            label5.Location = new Point(26, 105);
             label5.Name = "label5";
             label5.Size = new Size(142, 20);
             label5.TabIndex = 9;
@@ -211,9 +222,10 @@
             // 
             // label4
             // 
+            label4.Anchor = AnchorStyles.Left;
             label4.AutoSize = true;
             label4.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label4.Location = new Point(126, 58);
+            label4.Location = new Point(126, 72);
             label4.Name = "label4";
             label4.Size = new Size(42, 20);
             label4.TabIndex = 8;
@@ -221,9 +233,10 @@
             // 
             // label3
             // 
+            label3.Anchor = AnchorStyles.Left;
             label3.AutoSize = true;
             label3.Font = new Font("Segoe UI", 9F, FontStyle.Bold, GraphicsUnit.Point);
-            label3.Location = new Point(26, 26);
+            label3.Location = new Point(26, 40);
             label3.Name = "label3";
             label3.Size = new Size(142, 20);
             label3.TabIndex = 7;
@@ -231,27 +244,31 @@
             // 
             // BTIDTextBox
             // 
-            BTIDTextBox.Location = new Point(168, 88);
+            BTIDTextBox.Anchor = AnchorStyles.Bottom;
+            BTIDTextBox.Location = new Point(168, 102);
             BTIDTextBox.Name = "BTIDTextBox";
             BTIDTextBox.Size = new Size(158, 27);
             BTIDTextBox.TabIndex = 6;
             // 
             // HTZTextBox
             // 
-            HTZTextBox.Location = new Point(168, 55);
+            HTZTextBox.Anchor = AnchorStyles.Bottom;
+            HTZTextBox.Location = new Point(168, 69);
             HTZTextBox.Name = "HTZTextBox";
             HTZTextBox.Size = new Size(158, 27);
             HTZTextBox.TabIndex = 5;
             // 
             // ANRTextBox
             // 
-            ANRTextBox.Location = new Point(168, 22);
+            ANRTextBox.Anchor = AnchorStyles.Right;
+            ANRTextBox.Location = new Point(168, 36);
             ANRTextBox.Name = "ANRTextBox";
             ANRTextBox.Size = new Size(158, 27);
             ANRTextBox.TabIndex = 4;
             // 
             // label6
             // 
+            label6.Anchor = AnchorStyles.Right;
             label6.AutoSize = true;
             label6.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label6.Location = new Point(0, 33);
@@ -262,6 +279,7 @@
             // 
             // groupBox4
             // 
+            groupBox4.Anchor = AnchorStyles.Right;
             groupBox4.Controls.Add(label8);
             groupBox4.Controls.Add(CurrentQuantityTextBox);
             groupBox4.Controls.Add(SizeComboBox);
@@ -277,6 +295,7 @@
             // 
             // label8
             // 
+            label8.Anchor = AnchorStyles.Right;
             label8.AutoSize = true;
             label8.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label8.Location = new Point(33, 79);
@@ -287,14 +306,17 @@
             // 
             // CurrentQuantityTextBox
             // 
+            CurrentQuantityTextBox.Anchor = AnchorStyles.Right;
             CurrentQuantityTextBox.Location = new Point(220, 115);
             CurrentQuantityTextBox.Name = "CurrentQuantityTextBox";
             CurrentQuantityTextBox.ReadOnly = true;
             CurrentQuantityTextBox.Size = new Size(151, 27);
             CurrentQuantityTextBox.TabIndex = 9;
+            CurrentQuantityTextBox.Text = "0";
             // 
             // SizeComboBox
             // 
+            SizeComboBox.Anchor = AnchorStyles.Right;
             SizeComboBox.FormattingEnabled = true;
             SizeComboBox.Location = new Point(220, 26);
             SizeComboBox.Name = "SizeComboBox";
@@ -303,13 +325,17 @@
             // 
             // ExpectedQuantityTxtBox
             // 
+            ExpectedQuantityTxtBox.Anchor = AnchorStyles.Right;
             ExpectedQuantityTxtBox.Location = new Point(220, 69);
             ExpectedQuantityTxtBox.Name = "ExpectedQuantityTxtBox";
             ExpectedQuantityTxtBox.Size = new Size(151, 27);
             ExpectedQuantityTxtBox.TabIndex = 7;
+            ExpectedQuantityTxtBox.Text = "0";
+            ExpectedQuantityTxtBox.KeyPress += ExpectedQuantityTxtBox_KeyPress;
             // 
             // label7
             // 
+            label7.Anchor = AnchorStyles.Right;
             label7.AutoSize = true;
             label7.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
             label7.Location = new Point(86, 115);
@@ -320,6 +346,7 @@
             // 
             // pictureBox1
             // 
+            pictureBox1.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             pictureBox1.Image = (Image)resources.GetObject("pictureBox1.Image");
             pictureBox1.Location = new Point(672, 339);
             pictureBox1.Name = "pictureBox1";
@@ -329,6 +356,7 @@
             // 
             // pictureBox2
             // 
+            pictureBox2.Anchor = AnchorStyles.Top | AnchorStyles.Right;
             pictureBox2.Image = (Image)resources.GetObject("pictureBox2.Image");
             pictureBox2.Location = new Point(393, 24);
             pictureBox2.Name = "pictureBox2";
@@ -338,6 +366,7 @@
             // 
             // StartStopButton
             // 
+            StartStopButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             StartStopButton.Location = new Point(393, 361);
             StartStopButton.Name = "StartStopButton";
             StartStopButton.Size = new Size(157, 63);
@@ -348,6 +377,7 @@
             // 
             // ContactButton
             // 
+            ContactButton.Anchor = AnchorStyles.Bottom | AnchorStyles.Right;
             ContactButton.Location = new Point(571, 361);
             ContactButton.Name = "ContactButton";
             ContactButton.Size = new Size(86, 63);
