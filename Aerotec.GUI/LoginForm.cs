@@ -1,7 +1,5 @@
-using Aerotec.Data;
 using Aerotec.Data.Factories;
 using Aerotec.Data.Model;
-using System.Linq;
 using System.Net;
 
 namespace Aerotec.GUI
@@ -33,18 +31,18 @@ namespace Aerotec.GUI
 
         private void LoginButton_Click(object? sender, EventArgs e)
         {
-            if(LoginUserComboBox.SelectedItem == null)
+            if (LoginUserComboBox.SelectedItem == null)
             {
-                MessageBox.Show("Va rugam selectati un utilizator");
+                _ = MessageBox.Show("Va rugam selectati un utilizator");
                 return;
             }
-            if(!IPAddress.TryParse(LogInIPTextBox.Text, out IPAddress ipAddress))
+            if (!IPAddress.TryParse(LogInIPTextBox.Text, out IPAddress ipAddress))
             {
-                MessageBox.Show("Adresa IP a utilajului nu este corecta");
+                _ = MessageBox.Show("Adresa IP a utilajului nu este corecta");
                 return;
             }
             var logInInfo = new LogInInformation(
-                UserFactory.GetUsers().First( x=> string.Equals(x.Name, LoginUserComboBox.SelectedItem.ToString())),
+                UserFactory.GetUsers().First(x => string.Equals(x.Name, LoginUserComboBox.SelectedItem.ToString())),
                 LogInIPTextBox.Text);
             var mainForm = new MainForm(logInInfo);
             mainForm.FormClosed += MainForm_FormClosed;
@@ -64,7 +62,7 @@ namespace Aerotec.GUI
             {
                 // Prevent the character from being entered into the TextBox
                 e.Handled = true;
-            }           
+            }
         }
     }
 }

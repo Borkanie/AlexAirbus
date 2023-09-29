@@ -1,11 +1,8 @@
-﻿using Aerotec.Data.Helper;
+﻿// Copyrigth (c) S.C.SoftLab S.R.L.
+// All Rigths reserved.
+
+using Aerotec.Data.Helper;
 using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aerotec.Data.Factories
 {
@@ -21,7 +18,7 @@ namespace Aerotec.Data.Factories
             return instance;
         }
 
-        public Jet3UpMessageBuilder Write(string HTZ, string signature, string ANR, string BTIDX, string controllerId,string final)
+        public Jet3UpMessageBuilder Write(string HTZ, string signature, string ANR, string BTIDX, string controllerId, string final)
         {
 
             switch (size)
@@ -60,9 +57,9 @@ namespace Aerotec.Data.Factories
             return this;
         }
 
-        public Jet3UpMessageBuilder Write(string HTZ,string signature, string ANR,string BTIDX,string controllerId)
+        public Jet3UpMessageBuilder Write(string HTZ, string signature, string ANR, string BTIDX, string controllerId)
         {
-            
+
             switch (size)
             {
                 case FontSizeEnum.ISO1_5x3:

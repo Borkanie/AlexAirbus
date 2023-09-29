@@ -1,10 +1,8 @@
-﻿using Aerotec.Data.Model;
+﻿// Copyrigth (c) S.C.SoftLab S.R.L.
+// All Rigths reserved.
+
+using Aerotec.Data.Model;
 using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aerotec.Data.Factories
 {
@@ -14,7 +12,7 @@ namespace Aerotec.Data.Factories
 
         public static List<User> GetUsers()
         {
-            if(users == null)
+            if (users == null)
             {
                 GenerateUsers();
             }
@@ -42,9 +40,9 @@ namespace Aerotec.Data.Factories
                 GenerateUsers();
             }
             List<string> result = new List<string>();
-            foreach(var user in users)
+            foreach (var user in users)
             {
-                result.Add(user.Name);  
+                result.Add(user.Name);
             }
             return result;
         }

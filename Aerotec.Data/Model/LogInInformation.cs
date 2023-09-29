@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿// Copyrigth (c) S.C.SoftLab S.R.L.
+// All Rigths reserved.
+
 using System.Net;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aerotec.Data.Model
 {

@@ -1,9 +1,7 @@
-﻿using Aerotec.Data.Resources;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿// Copyrigth (c) S.C.SoftLab S.R.L.
+// All Rigths reserved.
+
+using Aerotec.Data.Resources;
 
 namespace Aerotec.Data.Helper
 {

@@ -1,4 +1,7 @@
-﻿namespace Aerotec.GUI
+﻿// Copyrigth (c) S.C.SoftLab S.R.L.
+// All Rigths reserved.
+
+namespace Aerotec.GUI
 {
     partial class MainForm
     {
@@ -34,7 +37,6 @@
             DataBTIDTextBox = new TextBox();
             DataControllerIdTextBox = new TextBox();
             SignatureTextBox = new TextBox();
-            textBox2 = new TextBox();
             DataHTZTextBox = new TextBox();
             groupBox2 = new GroupBox();
             label2 = new Label();
@@ -75,11 +77,10 @@
             INFORMATI.Controls.Add(DataBTIDTextBox);
             INFORMATI.Controls.Add(DataControllerIdTextBox);
             INFORMATI.Controls.Add(SignatureTextBox);
-            INFORMATI.Controls.Add(textBox2);
             INFORMATI.Controls.Add(DataHTZTextBox);
             INFORMATI.Location = new Point(27, 13);
             INFORMATI.Name = "INFORMATI";
-            INFORMATI.Size = new Size(332, 149);
+            INFORMATI.Size = new Size(332, 105);
             INFORMATI.TabIndex = 0;
             INFORMATI.TabStop = false;
             INFORMATI.Text = "PREVIZUALIZARE:";
@@ -120,15 +121,6 @@
             SignatureTextBox.TabIndex = 2;
             SignatureTextBox.Text = "PA";
             SignatureTextBox.TextAlign = HorizontalAlignment.Center;
-            // 
-            // textBox2
-            // 
-            textBox2.Location = new Point(14, 96);
-            textBox2.Name = "textBox2";
-            textBox2.ReadOnly = true;
-            textBox2.Size = new Size(312, 27);
-            textBox2.TabIndex = 1;
-            textBox2.TextAlign = HorizontalAlignment.Center;
             // 
             // DataHTZTextBox
             // 
@@ -373,7 +365,7 @@
             StartStopButton.TabIndex = 7;
             StartStopButton.Text = "START";
             StartStopButton.UseVisualStyleBackColor = true;
-            StartStopButton.Click += ExpectedQuantityTxtBox_Click;
+            StartStopButton.Click += StartStopButton_Click;
             // 
             // ContactButton
             // 
@@ -421,7 +413,6 @@
         private TextBox DataBTIDTextBox;
         private TextBox DataControllerIdTextBox;
         private TextBox SignatureTextBox;
-        private TextBox textBox2;
         private TextBox DataHTZTextBox;
         private GroupBox groupBox2;
         private Label label2;

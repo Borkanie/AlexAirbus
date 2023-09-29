@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System;
-using System.IO;
-using System.Threading;
-using System.Threading.Tasks;
+﻿// Copyrigth (c) S.C.SoftLab S.R.L.
+// All Rigths reserved.
 
 namespace Aerotec.Data.Helper
 {
@@ -21,7 +14,7 @@ namespace Aerotec.Data.Helper
             {
                 File.Create(outputPath).Close();
             }
-            if(!File.Exists(inputPath))
+            if (!File.Exists(inputPath))
             {
                 throw new ArgumentException("No input file");
             }
@@ -35,7 +28,7 @@ namespace Aerotec.Data.Helper
             cancellationTokenSource = null;
         }
 
-        private void ReadLines( CancellationToken cancellationToken, int quantity)
+        private void ReadLines(CancellationToken cancellationToken, int quantity)
         {
             try
             {
@@ -51,7 +44,7 @@ namespace Aerotec.Data.Helper
                         lastLine++;
                         TextReaderEvent?.Invoke(this, new ReadMEssageEventArg(line));
                         Thread.Sleep(1000);
-                        
+
                         if (lastLine == quantity)
                         {
                             break;
@@ -73,7 +66,7 @@ namespace Aerotec.Data.Helper
                 cancellationTokenSource = new CancellationTokenSource();
                 lastLine = 0;
                 Task.Run(() => ReadLines(cancellationTokenSource.Token, quantity));
-            }            
+            }
         }
 
         public event EventHandler<ReadMEssageEventArg> TextReaderEvent;
@@ -98,12 +91,12 @@ namespace Aerotec.Data.Helper
             if (!Reading)
             {
                 StartReading(1);
-            }            
+            }
         }
 
         public bool Reading
         {
-            get { return cancellationTokenSource==null? false:!cancellationTokenSource.IsCancellationRequested;}
+            get { return cancellationTokenSource == null ? false : !cancellationTokenSource.IsCancellationRequested; }
         }
     }
 }

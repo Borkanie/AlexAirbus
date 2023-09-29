@@ -1,5 +1,8 @@
-﻿namespace Aerotec.Data.Model
-{    
+﻿// Copyrigth (c) S.C.SoftLab S.R.L.
+// All Rigths reserved.
+
+namespace Aerotec.Data.Model
+{
     public class User
     {
         internal User()

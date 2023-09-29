@@ -1,12 +1,10 @@
-﻿using Aerotec.Data.Factories;
+﻿// Copyrigth (c) S.C.SoftLab S.R.L.
+// All Rigths reserved.
+
+using Aerotec.Data.Factories;
 using Aerotec.Data.Helper;
 using Aerotec.Data.Interface.Services;
 using Microsoft.VisualBasic;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Aerotec.Data.Services
 {
@@ -25,13 +23,13 @@ namespace Aerotec.Data.Services
 
         private void FileInterface_TextReaderEvent(object? sender, ReadMEssageEventArg e)
         {
-            
+
             if (e.Text.Contains("error"))
             {
                 Jet3UpMessageHendler?.Invoke(this, new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Error, "error"));
                 return;
             }
-            if(e.Text.Contains("write"))
+            if (e.Text.Contains("write"))
             {
                 Jet3UpMessageHendler?.Invoke(this, new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Marked, "one more"));
                 return;
@@ -41,7 +39,7 @@ namespace Aerotec.Data.Services
 
         public bool Connect(string Ip, int timeout)
         {
-            if(tcpMockUpClient == null)
+            if (tcpMockUpClient == null)
                 tcpMockUpClient = new TCPMockUpClient();
             fileInterface.Write("Connect method called with IP: " + Ip + " and timeout: " + timeout);
             return true;
@@ -61,9 +59,9 @@ namespace Aerotec.Data.Services
         public void Send(string text, bool final = false)
         {
             fileInterface.Write("Send method called with text: " + text);
-            if(final)
+            if (final)
             {
-                fileInterface.FinalizeReading();            
+                fileInterface.FinalizeReading();
             }
         }
 
