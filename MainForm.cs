@@ -124,6 +124,25 @@ namespace Aerotec
         private void Button3_Click(object sender, EventArgs e)
         {
             StartProductionButton.BackColor = Color.Lime;
+
+            if (SizeSmallChkBox.Checked == true)
+            {
+                byte[] SENDBYTES = Encoding.ASCII.GetBytes("^0!GO" + Constants.vbCrLf
+                                     + "^0*BEGINLJSCRIPT [()]" + Constants.vbCrLf
+                                     + "^0*JLPAR [ 60 1 0 3 10 180 0 30000 00:00 0 30000 0 0 1000 0]" + Constants.vbCrLf
+                                     + "^0*BEGINJOB [ 0 () ]" + Constants.vbCrLf
+                                     + "^0*JOBPAR [ 2000 0 0 280 0 0 0 1 1 0 -1 () 1 1 55000 0 9 0 1 0 100 0 1 0 ]" + Constants.vbCrLf
+                                     + "^0*OBJ [1 0 11 0 (ISO1_7x5)  (" + HTZTextBox.Text + " ) 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [2 89 11 0 (ISO1_7x5)  (PA) 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [3 0 0 0 (ISO1_7x5)  (" + ANRTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [4 64 0 0 (ISO1_7x5)  (" + BTIDTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*OBJ [5 87 0 0 (ISO1_7x5)  (" + ControllerIdTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
+                                     + "^0*ENDJOB []" + Constants.vbCrLf
+                                     + "^0*ENDLJSCRIPT []" + Constants.vbCrLf
+                                    );
+                TCPCLIENT.Client.Send(SENDBYTES);
+            }
+
             if (SizeStandardChkBox.Checked == true)
             {
 
@@ -144,23 +163,7 @@ namespace Aerotec
 
             }
 
-            if (SizeSmallChkBox.Checked == true)
-            {
-                byte[] SENDBYTES = Encoding.ASCII.GetBytes("^0!GO" + Constants.vbCrLf
-                                     + "^0*BEGINLJSCRIPT [()]" + Constants.vbCrLf
-                                     + "^0*JLPAR [ 60 1 0 3 10 180 0 30000 00:00 0 30000 0 0 1000 0]" + Constants.vbCrLf
-                                     + "^0*BEGINJOB [ 0 () ]" + Constants.vbCrLf
-                                     + "^0*JOBPAR [ 2000 0 0 280 0 0 0 1 1 0 -1 () 1 1 55000 0 9 0 1 0 100 0 1 0 ]" + Constants.vbCrLf
-                                     + "^0*OBJ [1 0 11 0 (ISO1_7x5)  (" + HTZTextBox.Text + " ) 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [2 89 11 0 (ISO1_7x5)  (PA) 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [3 0 0 0 (ISO1_7x5)  (" + ANRTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [4 64 0 0 (ISO1_7x5)  (" + BTIDTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*OBJ [5 87 0 0 (ISO1_7x5)  (" + ControllerIdTextBox.Text + ") 1 0 0 0 0 1 0 1 0 0 0 0 ()  () 0 0 () ]" + Constants.vbCrLf
-                                     + "^0*ENDJOB []" + Constants.vbCrLf
-                                     + "^0*ENDLJSCRIPT []" + Constants.vbCrLf
-                                    );
-                TCPCLIENT.Client.Send(SENDBYTES);
-            }
+
 
             if (SizeBigChkBox.Checked == true)
             {
