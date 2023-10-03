@@ -1,7 +1,6 @@
 ﻿// Copyrigth (c) S.C.SoftLab S.R.L.
 // All Rigths reserved.
 
-using Aerotec.Data.Factories;
 using Aerotec.Data.Helper;
 using Aerotec.Data.Interface.Services;
 using Aerotec.Data.Model;
@@ -9,7 +8,6 @@ using Aerotec.Data.Resources;
 using Aerotec.Data.Services;
 using Aerotec.GUI.Resources.Helper;
 using Aerotec.GUI.ViewModel;
-using Microsoft.VisualBasic;
 
 namespace Aerotec.GUI
 {
@@ -26,7 +24,7 @@ namespace Aerotec.GUI
         private bool DEBUG = false;
         private const int OriginalFontSize = 9;
         private bool sentFinal = false;
-        private readonly Dictionary<Control, Tuple<Point, Size>> OriginalElements = new Dictionary<Control, Tuple<Point, Size>>();
+        private readonly Dictionary<Control, Tuple<Point, Size>> OriginalElements = new();
         public MainForm(LogInInformation logInInfo)
         {
             InitializeComponent();
@@ -101,7 +99,7 @@ namespace Aerotec.GUI
             _ = jet3UpClientService.Connect(logInInfo.Address.ToString(), 3000);
             jet3UpClientService.Jet3UpMessageHendler += Jet3UpMessageHandler;
             jet3UpClientService.Jet3UpCommunicationInterrupted += Jet3UpClientService_Jet3UpCommunicationInterrupted;
-        }       
+        }
 
         private void SetMinim(Control control)
         {
@@ -109,13 +107,13 @@ namespace Aerotec.GUI
             {
                 if (!OriginalElements.ContainsKey(child))
                 {
-                    OriginalElements.Add(child, new Tuple<Point,Size>(child.Location, child.Size));
+                    OriginalElements.Add(child, new Tuple<Point, Size>(child.Location, child.Size));
                     if (child.Controls.Count > 0)
                     {
                         SetMinim(child);
                     }
                 }
-                
+
             }
         }
         #endregion
@@ -127,7 +125,7 @@ namespace Aerotec.GUI
             {
                 ((TCPClientService)jet3UpClientService).StopListening();
             }
-            MessageBox.Show(this, $"Eroare de comunicare cu aparatul procesul a fost intrerupt cu eroare {e.Exception.Message}", "Eroare de comunicare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            _ = MessageBox.Show(this, $"Eroare de comunicare cu aparatul procesul a fost intrerupt cu eroare \n{e.Exception.Message}", "Eroare de comunicare", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
         private void Form1_Resize(object sender, EventArgs e)
         {
@@ -137,7 +135,7 @@ namespace Aerotec.GUI
         {
             int expected;
             int current;
-            if(CurrentQuantityTextBox.Text == "0")
+            if (CurrentQuantityTextBox.Text == "0")
             {
                 return;
             }
@@ -164,7 +162,7 @@ namespace Aerotec.GUI
 
                 }
             }
-        }        
+        }
 
         private void ExpectedQuantityTxtBox_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -197,7 +195,7 @@ namespace Aerotec.GUI
                     {
                         CurrentQuantityTextBox.Text = (int.Parse(CurrentQuantityTextBox.Text) + 1).ToString();
                     });
-                }             
+                }
 
             }
         }
@@ -219,7 +217,7 @@ namespace Aerotec.GUI
         private void ContactForm_FormClosed(object? sender, FormClosedEventArgs e)
         {
             contactForm = null;
-            if(jet3UpClientService is TCPClientService)
+            if (jet3UpClientService is TCPClientService)
             {
                 ((TCPClientService)jet3UpClientService).StopListening();
             }
@@ -238,7 +236,7 @@ namespace Aerotec.GUI
             Working = false;
             ResetUiElements();
             CurrentQuantityTextBox.Text = "0";
-            MessageBox.Show("Comanda inscriptionata cu succes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+            _ = MessageBox.Show("Comanda inscriptionata cu succes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
         private void FinalComand()
@@ -274,24 +272,24 @@ namespace Aerotec.GUI
 
         private void ScaleControl(Control control, float scaleX, float scaleY)
         {
-           foreach(Control child in  control.Controls)
-           {
+            foreach (Control child in control.Controls)
+            {
                 var originalLocation = OriginalElements[child].Item1;
                 var originalSize = OriginalElements[child].Item2;
 
-                child.Location = new Point((int)(originalLocation.X * scaleX), (int)( originalLocation.Y * scaleY));
+                child.Location = new Point((int)(originalLocation.X * scaleX), (int)(originalLocation.Y * scaleY));
                 child.Size = new Size((int)(originalSize.Width * scaleX), (int)(originalSize.Height * scaleY));
 
                 child.Font = new Font(child.Font.FontFamily, OriginalFontSize * scaleY, child.Font.Style);
 
                 ScaleControl(child, scaleX, scaleY);
-           }
+            }
         }
 
         private void ResetUiElements()
         {
             StartStopButton.BackColor = Color.Green;
-            StartStopButton.Text = "START PRODUCTIE";            
+            StartStopButton.Text = "START PRODUCTIE";
         }
 
         private void StopWriting()

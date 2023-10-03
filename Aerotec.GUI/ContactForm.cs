@@ -2,7 +2,15 @@
 {
     public partial class ContactForm : Form
     {
-        private const string contactString = "Departament Tehnic\r\n\r\nIonescu Octavian - 0758.075.812\r\nStefan Cosmin -    0758.075.811\r\nMilitaru Andrei -  0745.186.686\r\n\r\nDepartament IT\r\nMihailov George - 0723.364.507\r\n\r\nComenzi \r\nE-mail: office@blajsa.ro\r\nTelefon : 031/423.14.11\r\n";
+        private const string contactString = "Departament Tehnic\r\n\r\n" +
+            "Ionescu Octavian - 0758.075.812\r\n" +
+            "Stefan Cosmin -    0758.075.811\r\n" +
+            "Militaru Andrei -  0745.186.686\r\n\r\n" +
+            "Departament IT\r\n" +
+            "Mihailov George - 0723.364.507\r\n\r\n" +
+            "Comenzi \r\n" +
+            "E-mail: office@blajsa.ro\r\n" +
+            "Telefon : 031/423.14.11\r\n";
 
         public ContactForm()
         {

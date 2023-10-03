@@ -41,13 +41,21 @@ namespace Aerotec.GUI
                 _ = MessageBox.Show("Adresa IP a utilajului nu este corecta");
                 return;
             }
-            var logInInfo = new LogInInformation(
+            try
+            {
+                var logInInfo = new LogInInformation(
                 UserFactory.GetUsers().First(x => string.Equals(x.Name, LoginUserComboBox.SelectedItem.ToString())),
                 LogInIPTextBox.Text);
-            var mainForm = new MainForm(logInInfo);
-            mainForm.FormClosed += MainForm_FormClosed;
-            Visible = false;
-            mainForm.Show();
+                var mainForm = new MainForm(logInInfo);
+                mainForm.FormClosed += MainForm_FormClosed;
+                Visible = false;
+                mainForm.Show();
+            }
+            catch(Exception ex)
+            {
+                MessageBox.Show($"Eroare de conectare la masina \n{ex.Message}", "Eroare conectare", MessageBoxButtons.OK);
+            }
+            
         }
 
         private void MainForm_FormClosed(object? sender, FormClosedEventArgs e)

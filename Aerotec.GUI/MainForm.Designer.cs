@@ -391,8 +391,9 @@ namespace Aerotec.GUI
             Controls.Add(groupBox3);
             Controls.Add(groupBox2);
             Controls.Add(INFORMATI);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "MainForm";
-            Text = "MainForm";
+            Text = "Interfata Jet3Up";
             INFORMATI.ResumeLayout(false);
             INFORMATI.PerformLayout();
             groupBox2.ResumeLayout(false);

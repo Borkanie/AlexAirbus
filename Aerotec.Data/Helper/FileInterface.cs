@@ -32,7 +32,7 @@ namespace Aerotec.Data.Helper
         {
             try
             {
-                using (StreamReader sr = new StreamReader(inputPath))
+                using (StreamReader sr = new(inputPath))
                 {
                     string line;
                     while ((line = sr.ReadLine()) != null)
@@ -52,7 +52,7 @@ namespace Aerotec.Data.Helper
                     }
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
                 // Handle exceptions if needed
             }
@@ -65,7 +65,7 @@ namespace Aerotec.Data.Helper
                 // Create a CancellationTokenSource for task cancellation
                 cancellationTokenSource = new CancellationTokenSource();
                 lastLine = 0;
-                Task.Run(() => ReadLines(cancellationTokenSource.Token, quantity));
+                _ = Task.Run(() => ReadLines(cancellationTokenSource.Token, quantity));
             }
         }
 
@@ -75,13 +75,13 @@ namespace Aerotec.Data.Helper
         {
             try
             {
-                using (StreamWriter sw = new StreamWriter(outputPath, true))
+                using (StreamWriter sw = new(outputPath, true))
                 {
                     // true argument specifies that we want to append to the file
                     sw.WriteLine(text);
                 }
             }
-            catch (Exception e)
+            catch (Exception)
             {
             }
         }
@@ -96,7 +96,7 @@ namespace Aerotec.Data.Helper
 
         public bool Reading
         {
-            get { return cancellationTokenSource == null ? false : !cancellationTokenSource.IsCancellationRequested; }
+            get { return cancellationTokenSource != null && !cancellationTokenSource.IsCancellationRequested; }
         }
     }
 }

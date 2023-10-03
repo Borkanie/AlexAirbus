@@ -31,26 +31,28 @@ namespace Aerotec.GUI
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(ContactForm));
             ContactTextBox = new TextBox();
             SuspendLayout();
             // 
-            // textBox1
+            // ContactTextBox
             // 
             ContactTextBox.Location = new Point(12, 12);
             ContactTextBox.Multiline = true;
-            ContactTextBox.Name = "textBox1";
+            ContactTextBox.Name = "ContactTextBox";
             ContactTextBox.ReadOnly = true;
-            ContactTextBox.Size = new Size(327, 220);
+            ContactTextBox.Size = new Size(382, 253);
             ContactTextBox.TabIndex = 0;
             // 
             // ContactForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
-            ClientSize = new Size(351, 244);
+            ClientSize = new Size(406, 277);
             Controls.Add(ContactTextBox);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "ContactForm";
-            Text = "ContactForm";
+            Text = "Contact";
             Load += ContactForm_Load;
             ResumeLayout(false);
             PerformLayout();

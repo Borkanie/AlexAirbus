@@ -105,8 +105,9 @@ namespace Aerotec.GUI
             Controls.Add(LogInIPTextBox);
             Controls.Add(LoginButton);
             Controls.Add(LoginUserComboBox);
+            Icon = (Icon)resources.GetObject("$this.Icon");
             Name = "LoginForm";
-            Text = "Form1";
+            Text = "Login";
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ResumeLayout(false);
             PerformLayout();

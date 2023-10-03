@@ -11,7 +11,7 @@ namespace Aerotec.Data.Interface.Services
 
         public void Send(string text, bool final = false);
 
-        public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity,string? anzahl);
+        public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity, string? anzahl);
 
         public void ContinueWriting();
 

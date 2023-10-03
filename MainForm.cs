@@ -91,7 +91,7 @@ namespace Aerotec
                     break;
 
                 default:
-                    MessageBox.Show("VA RUGAM SELECTATI UN CONTROLOR");
+                    _ = MessageBox.Show("VA RUGAM SELECTATI UN CONTROLOR");
                     //Panel1.Visible = true;
                     return;
             }
@@ -140,7 +140,7 @@ namespace Aerotec
                                      + "^0*ENDJOB []" + Constants.vbCrLf
                                      + "^0*ENDLJSCRIPT []" + Constants.vbCrLf
                                     );
-                TCPCLIENT.Client.Send(SENDBYTES);
+                _ = TCPCLIENT.Client.Send(SENDBYTES);
             }
 
             if (SizeStandardChkBox.Checked == true)
@@ -159,7 +159,7 @@ namespace Aerotec
                                      + "^0*ENDJOB []" + Constants.vbCrLf
                                      + "^0*ENDLJSCRIPT []" + Constants.vbCrLf
                                     );
-                TCPCLIENT.Client.Send(SENDBYTES);
+                _ = TCPCLIENT.Client.Send(SENDBYTES);
 
             }
 
@@ -180,15 +180,15 @@ namespace Aerotec
                                      + "^0*ENDJOB []" + Constants.vbCrLf
                                      + "^0*ENDLJSCRIPT []" + Constants.vbCrLf
                                     );
-                TCPCLIENT.Client.Send(SENDBYTES);
+                _ = TCPCLIENT.Client.Send(SENDBYTES);
 
             }
 
             byte[] SENDBYTES2 = Encoding.ASCII.GetBytes("^0=CC0" + Constants.vbTab + ExpectedQuantityTxtBox.Text + Constants.vbTab + "3999" + Constants.vbCrLf);
-            TCPCLIENT.Client.Send(SENDBYTES2);
+            _ = TCPCLIENT.Client.Send(SENDBYTES2);
 
             byte[] SENDBYTES3 = Encoding.ASCII.GetBytes("^0!EQ" + Constants.vbCrLf);
-            TCPCLIENT.Client.Send(SENDBYTES3);
+            _ = TCPCLIENT.Client.Send(SENDBYTES3);
 
 
         }

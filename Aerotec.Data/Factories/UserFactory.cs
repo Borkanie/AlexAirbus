@@ -39,7 +39,7 @@ namespace Aerotec.Data.Factories
             {
                 GenerateUsers();
             }
-            List<string> result = new List<string>();
+            List<string> result = new();
             foreach (var user in users)
             {
                 result.Add(user.Name);

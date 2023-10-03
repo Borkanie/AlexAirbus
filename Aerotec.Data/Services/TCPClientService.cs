@@ -20,9 +20,9 @@ namespace Aerotec.Data.Services
         public event EventHandler<Jet3UpMessageHendlerEventArgs> Jet3UpMessageHendler;
         public event EventHandler<Jet3UpCommunicationInterruptedErrorEventArgs> Jet3UpCommunicationInterrupted;
 
-        public bool Connect(string Ip, int timeout)
+        public bool Connect(string Ip, int port)
         {
-            client = new TcpClient(Ip, timeout);
+            client = new TcpClient(Ip, port);
             tcpClientStream = client.GetStream();
             tcpClientStream.ReadTimeout = 2000;
             return true;
@@ -48,32 +48,32 @@ namespace Aerotec.Data.Services
                 {
                     lock (client)
                     {
-                        client.Client.Send(SENDBYTES);
+                        _ = client.Client.Send(SENDBYTES);
                     }
                 }
-                catch(Exception ex)
+                catch (Exception ex)
                 {
                     Jet3UpCommunicationInterrupted?.Invoke(this, new Jet3UpCommunicationInterruptedErrorEventArgs(ex, true));
                 }
-                
+
             }
         }
 
         public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity, string? anzahl)
         {
-            this.expectedQuantity = expectedQuantity;            
+            this.expectedQuantity = expectedQuantity;
             string message;
             Send("^0!RC");
             Log.Write("^0!RC");
-            if (anzahl!=null)
+            if (anzahl != null)
             {
                 message = Jet3UpMessageBuilder.Start().Create().SetSize(size).Write(HTZ, signature, ANR, BTIDX, controllerId, anzahl).End();
             }
             else
             {
                 message = Jet3UpMessageBuilder.Start().Create().SetSize(size).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
-            }           
-           
+            }
+
             Send(message);
             Log.Write(message);
             Send("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999");
@@ -93,7 +93,7 @@ namespace Aerotec.Data.Services
         {
             StopListening();
             Send("^0!ST");
-            Log.Write("^0!ST");                       
+            Log.Write("^0!ST");
         }
 
         public void StartListening()
@@ -104,8 +104,8 @@ namespace Aerotec.Data.Services
                 {
                     // Create a CancellationTokenSource for task cancellation
                     cancellationTokenSource = new CancellationTokenSource();
-                    Task.Run(() => ListenForResponses(cancellationTokenSource.Token));
-                }                
+                    _ = Task.Run(() => ListenForResponses(cancellationTokenSource.Token));
+                }
             }
         }
 
@@ -147,13 +147,13 @@ namespace Aerotec.Data.Services
             catch (Exception ex)
             {
                 Jet3UpCommunicationInterrupted?.Invoke(this, new Jet3UpCommunicationInterruptedErrorEventArgs(ex, false));
-            }            
+            }
         }
 
         private int NumberOfDigitsInInt(int expectedQuantity)
         {
             int result = 0;
-            while(expectedQuantity > 0)
+            while (expectedQuantity > 0)
             {
                 expectedQuantity = expectedQuantity / 10;
                 result++;
