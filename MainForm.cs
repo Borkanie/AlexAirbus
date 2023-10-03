@@ -181,12 +181,10 @@ namespace Aerotec
 
             }
 
-            byte[] SENDBYTES2 = Encoding.ASCII.GetBytes("^0=CC0" + Constants.vbTab + ExpectedQuantityTxtBox.Text + Constants.vbTab + "3999" + Constants.vbCrLf
-);
+            byte[] SENDBYTES2 = Encoding.ASCII.GetBytes("^0=CC0" + Constants.vbTab + ExpectedQuantityTxtBox.Text + Constants.vbTab + "3999" + Constants.vbCrLf);
             TCPCLIENT.Client.Send(SENDBYTES2);
 
-            byte[] SENDBYTES3 = Encoding.ASCII.GetBytes("^0!EQ" + Constants.vbCrLf
-);
+            byte[] SENDBYTES3 = Encoding.ASCII.GetBytes("^0!EQ" + Constants.vbCrLf);
             TCPCLIENT.Client.Send(SENDBYTES3);
 
 

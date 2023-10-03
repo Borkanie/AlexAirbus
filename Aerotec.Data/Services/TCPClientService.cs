@@ -12,30 +12,26 @@ namespace Aerotec.Data.Services
 {
     public class TCPClientService : IClientService
     {
-        private string HTZ = "";
-        private string signature = "";
-        private string ANR = "";
-        private string BTIDX = "";
-        private string controllerId = "";
         private int expectedQuantity = 0;
-        private int current = 0;
-
-        private FontSizeEnum fontSizeEnum;
         private TcpClient client;
         private NetworkStream tcpClientStream;
-
+        // CancellationTokenSource to allow task cancellation
+        private CancellationTokenSource? cancellationTokenSource;
         public event EventHandler<Jet3UpMessageHendlerEventArgs> Jet3UpMessageHendler;
+        public event EventHandler<Jet3UpCommunicationInterruptedErrorEventArgs> Jet3UpCommunicationInterrupted;
 
         public bool Connect(string Ip, int timeout)
         {
             client = new TcpClient(Ip, timeout);
             tcpClientStream = client.GetStream();
+            tcpClientStream.ReadTimeout = 2000;
             return true;
         }
 
         public void ContinueWriting()
         {
-
+            Send("^0!GO");
+            Log.Write("^0!GO");
         }
 
         public bool IsConnected()
@@ -47,38 +43,136 @@ namespace Aerotec.Data.Services
         {
             if (IsConnected())
             {
-                byte[] SENDBYTES = Encoding.ASCII.GetBytes(text);
-                client.Client.Send(SENDBYTES);
+                byte[] SENDBYTES = Encoding.ASCII.GetBytes(text + Constants.vbCrLf);
+                try
+                {
+                    lock (client)
+                    {
+                        client.Client.Send(SENDBYTES);
+                    }
+                }
+                catch(Exception ex)
+                {
+                    Jet3UpCommunicationInterrupted?.Invoke(this, new Jet3UpCommunicationInterruptedErrorEventArgs(ex, true));
+                }
+                
             }
         }
-        private string GetFinalMessage()
-        {
-            DateTime currentDate = DateTime.Now;
-            var formattedDate = currentDate.ToString("dd/MM/yyyy");
 
-            return formattedDate + $" Anzahl Soll:{expectedQuantity} Ist:{current}";
-        }
-        public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity)
+        public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity, string? anzahl)
         {
-            this.HTZ = HTZ;
-            this.signature = signature;
-            this.ANR = ANR;
-            this.BTIDX = BTIDX;
-            this.controllerId = controllerId;
-            this.fontSizeEnum = size;
-            this.expectedQuantity = expectedQuantity;
-
+            this.expectedQuantity = expectedQuantity;            
             string message;
-            message = Jet3UpMessageBuilder.Start().Create().SetSize(FontSizeEnum.ISO1_5x3).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
+            Send("^0!RC");
+            Log.Write("^0!RC");
+            if (anzahl!=null)
+            {
+                message = Jet3UpMessageBuilder.Start().Create().SetSize(size).Write(HTZ, signature, ANR, BTIDX, controllerId, anzahl).End();
+            }
+            else
+            {
+                message = Jet3UpMessageBuilder.Start().Create().SetSize(size).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
+            }           
+           
             Send(message);
-            Send("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999" + Constants.vbCrLf);
-            Send("^0!EQ" + Constants.vbCrLf);
+            Log.Write(message);
+            Send("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999");
+            Log.Write("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999");
+            Send("^0!EQ");
+            Log.Write("^0!EQ");
+            StartListening();
         }
 
+        public void StopListening()
+        {
+            cancellationTokenSource?.Cancel();
+            cancellationTokenSource = null;
+        }
 
         public void StopCommand()
         {
+            StopListening();
+            Send("^0!ST");
+            Log.Write("^0!ST");                       
+        }
 
+        public void StartListening()
+        {
+            if (IsConnected())
+            {
+                if (cancellationTokenSource == null)
+                {
+                    // Create a CancellationTokenSource for task cancellation
+                    cancellationTokenSource = new CancellationTokenSource();
+                    Task.Run(() => ListenForResponses(cancellationTokenSource.Token));
+                }                
+            }
+        }
+
+        private void ListenForResponses(CancellationToken cancellationToken)
+        {
+            Thread.Sleep(1000);
+            byte[] buffer = new byte[15 + NumberOfDigitsInInt(expectedQuantity)]; // Adjust the buffer size as needed
+            try
+            {
+                while (true)
+                {
+                    if (cancellationToken.IsCancellationRequested)
+                    {
+                        return;
+                    }
+                    Thread.Sleep(250);
+
+                    int bytesRead = AskForCurrentIndex(ref buffer);
+                    if (bytesRead > 0)
+                    {
+                        string response = Encoding.ASCII.GetString(buffer, 0, bytesRead);
+                        // Process the response here
+                        // You can raise an event or do whatever is necessary with the response data
+                        if (cancellationToken.IsCancellationRequested)
+                        {
+                            return;
+                        }
+                        int val = int.Parse(response.Split('C')[2].Split('\t')[0]);
+                        if (val < expectedQuantity)
+                        {
+                            ContinueWriting();
+                        }
+                        Jet3UpMessageHendler?.Invoke(this, new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Marked, response.Split('C')[2].Split('\t')[0]));
+                        Log.Write(response.Split('C')[2].Split('\t')[0]);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                Jet3UpCommunicationInterrupted?.Invoke(this, new Jet3UpCommunicationInterruptedErrorEventArgs(ex, false));
+            }            
+        }
+
+        private int NumberOfDigitsInInt(int expectedQuantity)
+        {
+            int result = 0;
+            while(expectedQuantity > 0)
+            {
+                expectedQuantity = expectedQuantity / 10;
+                result++;
+            }
+            return result;
+        }
+
+        private int AskForCurrentIndex(ref byte[] buffer)
+        {
+            int bytesRead;
+            string getCurrentIndex = "^0?CC";
+            Send(getCurrentIndex);
+            Log.Write(getCurrentIndex);
+            lock (client)
+            {
+                bytesRead = tcpClientStream.Read(buffer, 0, buffer.Length);
+            }
+
+            return bytesRead;
         }
     }
 }

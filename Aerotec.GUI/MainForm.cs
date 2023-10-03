@@ -23,8 +23,10 @@ namespace Aerotec.GUI
         private TextBindingModel BTID = new();
         private TextBindingModel HTZ = new();
         private TextBindingModel ANR = new();
-        private bool DEBUG = true;
+        private bool DEBUG = false;
         private const int OriginalFontSize = 9;
+        private bool sentFinal = false;
+        private readonly Dictionary<Control, Tuple<Point, Size>> OriginalElements = new Dictionary<Control, Tuple<Point, Size>>();
         public MainForm(LogInInformation logInInfo)
         {
             InitializeComponent();
@@ -75,7 +77,7 @@ namespace Aerotec.GUI
             {
                 _ = SizeComboBox.Items.Add(size);
             }
-            SizeComboBox.SelectedIndex = 0;
+            SizeComboBox.SelectedIndex = 1;
         }
 
         private void SetUpResize()
@@ -98,22 +100,35 @@ namespace Aerotec.GUI
             }
             _ = jet3UpClientService.Connect(logInInfo.Address.ToString(), 3000);
             jet3UpClientService.Jet3UpMessageHendler += Jet3UpMessageHandler;
-        }
+            jet3UpClientService.Jet3UpCommunicationInterrupted += Jet3UpClientService_Jet3UpCommunicationInterrupted;
+        }       
 
         private void SetMinim(Control control)
         {
             foreach (Control child in control.Controls)
             {
-                child.MinimumSize = child.Size;
-                if (child.Controls.Count > 0)
+                if (!OriginalElements.ContainsKey(child))
                 {
-                    SetMinim(child);
+                    OriginalElements.Add(child, new Tuple<Point,Size>(child.Location, child.Size));
+                    if (child.Controls.Count > 0)
+                    {
+                        SetMinim(child);
+                    }
                 }
+                
             }
         }
         #endregion
 
         #region Events
+        private void Jet3UpClientService_Jet3UpCommunicationInterrupted(object? sender, Jet3UpCommunicationInterruptedErrorEventArgs e)
+        {
+            if (jet3UpClientService is TCPClientService && e.ErrorWhenReading == false)
+            {
+                ((TCPClientService)jet3UpClientService).StopListening();
+            }
+            MessageBox.Show(this, $"Eroare de comunicare cu aparatul procesul a fost intrerupt cu eroare {e.Exception.Message}", "Eroare de comunicare", MessageBoxButtons.OK, MessageBoxIcon.Error);
+        }
         private void Form1_Resize(object sender, EventArgs e)
         {
             ScaleControls();
@@ -122,42 +137,22 @@ namespace Aerotec.GUI
         {
             int expected;
             int current;
+            if(CurrentQuantityTextBox.Text == "0")
+            {
+                return;
+            }
             if (int.TryParse(ExpectedQuantityTxtBox.Text, out expected) && int.TryParse(CurrentQuantityTextBox.Text, out current))
             {
                 if (current == expected - 1)
                 {
-                    StopWriting();
-                    var dialog = MessageBox.Show("Doriti sa marcati finalul de comanda?", "Ultima piesa", MessageBoxButtons.YesNoCancel);
-                    switch (dialog)
-                    {
-                        case DialogResult.Yes:
-                            WriteFinal();
-                            return;
-                        case DialogResult.No:
-                            StartWriting(1);
-                            return;
-                        default:
-                            ResetUiElements();
-                            Working = false;
-                            return;
-                    }
+                    FinalComand();
+                    return;
                 }
                 else
                 {
                     if (current > expected - 1)
                     {
-                        StopWriting();
-                        Working = false;
-                        ResetUiElements();
-                        if (current == expected)
-                        {
-                            _ = MessageBox.Show("Comanda inscriptionata cu succes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
-                        }
-                        else
-                        {
-                            _ = MessageBox.Show("Eroare in operatia de printare, numarul de piese printate nu are voie sa depaseasca numarul de piese din comanda", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                        }
-
+                        ComandIsComplete();
                     }
                 }
             }
@@ -169,7 +164,7 @@ namespace Aerotec.GUI
 
                 }
             }
-        }
+        }        
 
         private void ExpectedQuantityTxtBox_KeyPress(object sender, KeyPressEventArgs e)
         {
@@ -189,10 +184,20 @@ namespace Aerotec.GUI
             }
             else
             {
-                CurrentQuantityTextBox.Invoke(() =>
+                if (!sentFinal)
                 {
-                    CurrentQuantityTextBox.Text = (int.Parse(CurrentQuantityTextBox.Text) + 1).ToString();
-                });
+                    CurrentQuantityTextBox.Invoke(() =>
+                    {
+                        CurrentQuantityTextBox.Text = e.Message;
+                    });
+                }
+                else
+                {
+                    CurrentQuantityTextBox.Invoke(() =>
+                    {
+                        CurrentQuantityTextBox.Text = (int.Parse(CurrentQuantityTextBox.Text) + 1).ToString();
+                    });
+                }             
 
             }
         }
@@ -214,6 +219,10 @@ namespace Aerotec.GUI
         private void ContactForm_FormClosed(object? sender, FormClosedEventArgs e)
         {
             contactForm = null;
+            if(jet3UpClientService is TCPClientService)
+            {
+                ((TCPClientService)jet3UpClientService).StopListening();
+            }
         }
 
         private void StartStopButton_Click(object sender, EventArgs e)
@@ -223,6 +232,38 @@ namespace Aerotec.GUI
         #endregion
 
         #region Helpers
+        private void ComandIsComplete()
+        {
+            StopWriting();
+            Working = false;
+            ResetUiElements();
+            CurrentQuantityTextBox.Text = "0";
+            MessageBox.Show("Comanda inscriptionata cu succes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
+        }
+
+        private void FinalComand()
+        {
+            StopWriting();
+            var dialog = MessageBox.Show("Doriti sa marcati finalul de comanda?", "Ultima piesa", MessageBoxButtons.YesNoCancel);
+            switch (dialog)
+            {
+                case DialogResult.Yes:
+                    DateTime currentDate = DateTime.Now;
+                    var formattedDate = currentDate.ToString("dd/MM/yyyy");
+
+                    var anzahl = formattedDate + $" Anzahl Soll:{ExpectedQuantityTxtBox.Text} Ist:{CurrentQuantityTextBox.Text}";
+                    jet3UpClientService.StartWriting((FontSizeEnum)SizeComboBox.SelectedItem, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, 1, anzahl);
+                    sentFinal = true;
+                    return;
+                case DialogResult.No:
+                    jet3UpClientService.StartWriting((FontSizeEnum)SizeComboBox.SelectedItem, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, 1, null);
+                    sentFinal = true;
+                    return;
+                default:
+                    StartStopWorking(false);
+                    return;
+            }
+        }
         private void ScaleControls()
         {
             float scaleX = (float)this.Width / this.MinimumSize.Width;
@@ -233,93 +274,24 @@ namespace Aerotec.GUI
 
         private void ScaleControl(Control control, float scaleX, float scaleY)
         {
-            foreach (Control child in control.Controls)
-            {
-                if (child.Anchor == AnchorStyles.Top || child.Anchor == AnchorStyles.Bottom)
-                    child.Width = (int)(child.MinimumSize.Width * scaleX);
-                if (child.Anchor == AnchorStyles.Left || child.Anchor == AnchorStyles.Right)
-                    child.Height = (int)(child.MinimumSize.Height * scaleY);
+           foreach(Control child in  control.Controls)
+           {
+                var originalLocation = OriginalElements[child].Item1;
+                var originalSize = OriginalElements[child].Item2;
 
-                ScaleFont(child, scaleY);
-                if (child.Controls.Count > 0)
-                {
-                    ScaleControl(child, scaleX, scaleY);
-                }
-            }
-        }
+                child.Location = new Point((int)(originalLocation.X * scaleX), (int)( originalLocation.Y * scaleY));
+                child.Size = new Size((int)(originalSize.Width * scaleX), (int)(originalSize.Height * scaleY));
 
-        private void ScaleFont(Control control, float scale)
-        {
-            control.Font = new Font(control.Font.FontFamily, OriginalFontSize * scale, control.Font.Style, control.Font.Unit);
+                child.Font = new Font(child.Font.FontFamily, OriginalFontSize * scaleY, child.Font.Style);
+
+                ScaleControl(child, scaleX, scaleY);
+           }
         }
 
         private void ResetUiElements()
         {
             StartStopButton.BackColor = Color.Green;
-            StartStopButton.Text = "START PRODUCTIE";
-            CurrentQuantityTextBox.Text = "0";
-            Working = false;
-        }
-
-        private void StartWriting(int number = 0)
-        {
-            switch (SizeComboBox.SelectedItem)
-            {
-                case SizeEnum.Mic:
-                    jet3UpClientService.StartWriting(FontSizeEnum.ISO1_5x3, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, number);
-                    break;
-                case SizeEnum.Standard:
-                    jet3UpClientService.StartWriting(FontSizeEnum.ISO1_7x5, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, number);
-                    break;
-                case SizeEnum.Mare:
-                    jet3UpClientService.StartWriting(FontSizeEnum.ISO1_9x7, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, number);
-                    break;
-                default:
-
-                    break;
-            }
-        }
-        private string GetFinalMessage()
-        {
-            DateTime currentDate = DateTime.Now;
-            var formattedDate = currentDate.ToString("dd/MM/yyyy");
-
-            return formattedDate + $" Anzahl Soll:{ExpectedQuantityTxtBox.Text} Ist:{CurrentQuantityTextBox.Text}";
-        }
-
-        private void WriteFinal()
-        {
-            var fin = GetFinalMessage();
-            string message;
-            switch (SizeComboBox.SelectedItem)
-            {
-                case SizeEnum.Mic:
-                    message = Jet3UpMessageBuilder.Start().Create().SetSize(FontSizeEnum.ISO1_5x3).Write(HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, fin).End();
-                    break;
-                case SizeEnum.Standard:
-                    message = Jet3UpMessageBuilder.Start().Create().SetSize(FontSizeEnum.ISO1_7x5).Write(HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, fin).End();
-                    break;
-                case SizeEnum.Mare:
-                    message = Jet3UpMessageBuilder.Start().Create().SetSize(FontSizeEnum.ISO1_9x7).Write(HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, fin).End();
-                    break;
-                default:
-                    message = null;
-                    break;
-            }
-            if (message != null)
-            {
-                jet3UpClientService.Send(message, true);
-            }
-            jet3UpClientService.Send("^0=CC0" + Constants.vbTab + ExpectedQuantityTxtBox.Text + Constants.vbTab + "3999" + Constants.vbCrLf);
-
-            jet3UpClientService.Send("^0!EQ" + Constants.vbCrLf);
-
-            Thread.Sleep(1000);
-
-            StartStopButton.BackColor = Color.Green;
-            StartStopButton.Text = "START";
-
-            Working = false;
+            StartStopButton.Text = "START PRODUCTIE";            
         }
 
         private void StopWriting()
@@ -340,9 +312,9 @@ namespace Aerotec.GUI
                     if (value)
                     {
                         int res;
-                        if (int.TryParse(ExpectedQuantityTxtBox.Text, out res) || res == 0)
+                        if (!int.TryParse(ExpectedQuantityTxtBox.Text, out res) || res == 0)
                         {
-                            _ = MessageBox.Show("Totalul de piese din comanda rtebuie sa fie un numar mai amre ca 0", "Eroare", MessageBoxButtons.OK);
+                            _ = MessageBox.Show("Totalul de piese din comanda trebuie sa fie un numar mai mare ca 0", "Eroare", MessageBoxButtons.OK);
                             return;
                         }
                     }
@@ -354,6 +326,7 @@ namespace Aerotec.GUI
 
         private void StartStopWorking(bool start)
         {
+            sentFinal = false;
             SizeComboBox.Enabled = !start;
             ControllerIdTextBox.Enabled = !start;
             HTZTextBox.Enabled = !start;
@@ -361,16 +334,22 @@ namespace Aerotec.GUI
             ANRTextBox.Enabled = !start;
             if (start)
             {
-                StartWriting(int.Parse(ExpectedQuantityTxtBox.Text) - 1);
+                jet3UpClientService.StartWriting((FontSizeEnum)SizeComboBox.SelectedItem,
+                                                HTZTextBox.Text,
+                                                SignatureTextBox.Text,
+                                                ANRTextBox.Text,
+                                                BTIDTextBox.Text,
+                                                ControllerIdTextBox.Text,
+                                                int.Parse(ExpectedQuantityTxtBox.Text) - 1,
+                                                null);
                 StartStopButton.BackColor = Color.Red;
                 StartStopButton.Text = "STOP";
             }
             else
             {
                 StopWriting();
-                StartStopButton.BackColor = Color.Green;
-                StartStopButton.Text = "START";
                 ResetUiElements();
+                CurrentQuantityTextBox.Text = "0";
             }
         }
         #endregion

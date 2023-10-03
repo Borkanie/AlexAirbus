@@ -14,6 +14,7 @@ namespace Aerotec.Data.Services
         private FileInterface fileInterface;
 
         public event EventHandler<Jet3UpMessageHendlerEventArgs> Jet3UpMessageHendler;
+        public event EventHandler<Jet3UpCommunicationInterruptedErrorEventArgs> Jet3UpCommunicationInterrupted;
 
         public TCPMockUpClient()
         {
@@ -65,7 +66,7 @@ namespace Aerotec.Data.Services
             }
         }
 
-        public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity)
+        public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity, string? anzahl)
         {
             string message;
             message = Jet3UpMessageBuilder.Start().Create().SetSize(FontSizeEnum.ISO1_5x3).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
