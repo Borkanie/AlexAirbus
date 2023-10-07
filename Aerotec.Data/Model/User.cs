@@ -5,9 +5,10 @@ namespace Aerotec.Data.Model
 {
     public class User
     {
-        internal User()
+        public User()
         {
-
+            Id = "";
+            Name = "";
         }
         internal User(string name)
         {

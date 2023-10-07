@@ -32,6 +32,7 @@ namespace Aerotec.Data.Helper
         {
             try
             {
+                int count = 0;
                 using (StreamReader sr = new(inputPath))
                 {
                     string line;
@@ -42,7 +43,7 @@ namespace Aerotec.Data.Helper
                             break;
 
                         lastLine++;
-                        TextReaderEvent?.Invoke(this, new ReadMEssageEventArg(line));
+                        TextReaderEvent?.Invoke(this, new ReadMEssageEventArg((++count).ToString()));
                         Thread.Sleep(1000);
 
                         if (lastLine == quantity)

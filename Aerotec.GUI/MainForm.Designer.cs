@@ -39,6 +39,10 @@ namespace Aerotec.GUI
             SignatureTextBox = new TextBox();
             DataHTZTextBox = new TextBox();
             groupBox2 = new GroupBox();
+            LabelRotatie = new Label();
+            ComboBoxRotation = new ComboBox();
+            label9 = new Label();
+            ComboBoxMachine = new ComboBox();
             label2 = new Label();
             label1 = new Label();
             ControllerIdTextBox = new TextBox();
@@ -135,22 +139,64 @@ namespace Aerotec.GUI
             // 
             groupBox2.Anchor = AnchorStyles.Left;
             groupBox2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            groupBox2.Controls.Add(LabelRotatie);
+            groupBox2.Controls.Add(ComboBoxRotation);
+            groupBox2.Controls.Add(label9);
+            groupBox2.Controls.Add(ComboBoxMachine);
             groupBox2.Controls.Add(label2);
             groupBox2.Controls.Add(label1);
             groupBox2.Controls.Add(ControllerIdTextBox);
             groupBox2.Controls.Add(ControllerTextBox);
-            groupBox2.Location = new Point(27, 170);
+            groupBox2.Location = new Point(27, 124);
             groupBox2.Name = "groupBox2";
-            groupBox2.Size = new Size(332, 122);
+            groupBox2.Size = new Size(332, 168);
             groupBox2.TabIndex = 1;
             groupBox2.TabStop = false;
             groupBox2.Text = "UTILIZATOR";
+            // 
+            // LabelRotatie
+            // 
+            LabelRotatie.Anchor = AnchorStyles.Left;
+            LabelRotatie.AutoSize = true;
+            LabelRotatie.Location = new Point(62, 34);
+            LabelRotatie.Name = "LabelRotatie";
+            LabelRotatie.Size = new Size(67, 20);
+            LabelRotatie.TabIndex = 12;
+            LabelRotatie.Text = "ROTATIE:";
+            // 
+            // ComboBoxRotation
+            // 
+            ComboBoxRotation.Anchor = AnchorStyles.Right;
+            ComboBoxRotation.FormattingEnabled = true;
+            ComboBoxRotation.Location = new Point(168, 26);
+            ComboBoxRotation.Name = "ComboBoxRotation";
+            ComboBoxRotation.Size = new Size(158, 28);
+            ComboBoxRotation.TabIndex = 11;
+            // 
+            // label9
+            // 
+            label9.Anchor = AnchorStyles.Left;
+            label9.AutoSize = true;
+            label9.Location = new Point(61, 72);
+            label9.Name = "label9";
+            label9.Size = new Size(84, 20);
+            label9.TabIndex = 10;
+            label9.Text = "CERNEALA:";
+            // 
+            // ComboBoxMachine
+            // 
+            ComboBoxMachine.Anchor = AnchorStyles.Right;
+            ComboBoxMachine.FormattingEnabled = true;
+            ComboBoxMachine.Location = new Point(168, 64);
+            ComboBoxMachine.Name = "ComboBoxMachine";
+            ComboBoxMachine.Size = new Size(158, 28);
+            ComboBoxMachine.TabIndex = 9;
             // 
             // label2
             // 
             label2.Anchor = AnchorStyles.Left;
             label2.AutoSize = true;
-            label2.Location = new Point(102, 72);
+            label2.Location = new Point(102, 140);
             label2.Name = "label2";
             label2.Size = new Size(27, 20);
             label2.TabIndex = 6;
@@ -160,7 +206,7 @@ namespace Aerotec.GUI
             // 
             label1.Anchor = AnchorStyles.Left;
             label1.AutoSize = true;
-            label1.Location = new Point(32, 39);
+            label1.Location = new Point(32, 105);
             label1.Name = "label1";
             label1.Size = new Size(97, 20);
             label1.TabIndex = 5;
@@ -169,7 +215,7 @@ namespace Aerotec.GUI
             // ControllerIdTextBox
             // 
             ControllerIdTextBox.Anchor = AnchorStyles.Left;
-            ControllerIdTextBox.Location = new Point(168, 69);
+            ControllerIdTextBox.Location = new Point(168, 133);
             ControllerIdTextBox.Name = "ControllerIdTextBox";
             ControllerIdTextBox.ReadOnly = true;
             ControllerIdTextBox.Size = new Size(158, 27);
@@ -178,7 +224,7 @@ namespace Aerotec.GUI
             // ControllerTextBox
             // 
             ControllerTextBox.Anchor = AnchorStyles.Left;
-            ControllerTextBox.Location = new Point(168, 33);
+            ControllerTextBox.Location = new Point(168, 98);
             ControllerTextBox.Name = "ControllerTextBox";
             ControllerTextBox.ReadOnly = true;
             ControllerTextBox.Size = new Size(158, 27);
@@ -263,7 +309,7 @@ namespace Aerotec.GUI
             label6.Anchor = AnchorStyles.Right;
             label6.AutoSize = true;
             label6.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label6.Location = new Point(0, 33);
+            label6.Location = new Point(0, 34);
             label6.Name = "label6";
             label6.Size = new Size(214, 17);
             label6.TabIndex = 3;
@@ -278,9 +324,9 @@ namespace Aerotec.GUI
             groupBox4.Controls.Add(ExpectedQuantityTxtBox);
             groupBox4.Controls.Add(label7);
             groupBox4.Controls.Add(label6);
-            groupBox4.Location = new Point(393, 170);
+            groupBox4.Location = new Point(393, 142);
             groupBox4.Name = "groupBox4";
-            groupBox4.Size = new Size(395, 148);
+            groupBox4.Size = new Size(395, 150);
             groupBox4.TabIndex = 4;
             groupBox4.TabStop = false;
             groupBox4.Text = "MARIMEA SI CANTITATE";
@@ -290,7 +336,7 @@ namespace Aerotec.GUI
             label8.Anchor = AnchorStyles.Right;
             label8.AutoSize = true;
             label8.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label8.Location = new Point(33, 79);
+            label8.Location = new Point(33, 80);
             label8.Name = "label8";
             label8.Size = new Size(181, 17);
             label8.TabIndex = 10;
@@ -299,7 +345,7 @@ namespace Aerotec.GUI
             // CurrentQuantityTextBox
             // 
             CurrentQuantityTextBox.Anchor = AnchorStyles.Right;
-            CurrentQuantityTextBox.Location = new Point(220, 115);
+            CurrentQuantityTextBox.Location = new Point(220, 116);
             CurrentQuantityTextBox.Name = "CurrentQuantityTextBox";
             CurrentQuantityTextBox.ReadOnly = true;
             CurrentQuantityTextBox.Size = new Size(151, 27);
@@ -310,7 +356,7 @@ namespace Aerotec.GUI
             // 
             SizeComboBox.Anchor = AnchorStyles.Right;
             SizeComboBox.FormattingEnabled = true;
-            SizeComboBox.Location = new Point(220, 26);
+            SizeComboBox.Location = new Point(220, 27);
             SizeComboBox.Name = "SizeComboBox";
             SizeComboBox.Size = new Size(151, 28);
             SizeComboBox.TabIndex = 8;
@@ -318,7 +364,7 @@ namespace Aerotec.GUI
             // ExpectedQuantityTxtBox
             // 
             ExpectedQuantityTxtBox.Anchor = AnchorStyles.Right;
-            ExpectedQuantityTxtBox.Location = new Point(220, 69);
+            ExpectedQuantityTxtBox.Location = new Point(220, 70);
             ExpectedQuantityTxtBox.Name = "ExpectedQuantityTxtBox";
             ExpectedQuantityTxtBox.Size = new Size(151, 27);
             ExpectedQuantityTxtBox.TabIndex = 7;
@@ -330,7 +376,7 @@ namespace Aerotec.GUI
             label7.Anchor = AnchorStyles.Right;
             label7.AutoSize = true;
             label7.Font = new Font("Arial", 9F, FontStyle.Regular, GraphicsUnit.Point);
-            label7.Location = new Point(86, 115);
+            label7.Location = new Point(86, 116);
             label7.Name = "label7";
             label7.Size = new Size(128, 17);
             label7.TabIndex = 6;
@@ -438,5 +484,9 @@ namespace Aerotec.GUI
         private Button ContactButton;
         private Label label8;
         private TextBox CurrentQuantityTextBox;
+        private Label label9;
+        private ComboBox ComboBoxMachine;
+        private Label LabelRotatie;
+        private ComboBox ComboBoxRotation;
     }
 }

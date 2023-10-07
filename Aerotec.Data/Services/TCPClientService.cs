@@ -59,7 +59,7 @@ namespace Aerotec.Data.Services
             }
         }
 
-        public void StartWriting(FontSizeEnum size, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity, string? anzahl)
+        public void StartWriting(FontSizeEnum size,int rotation,MachineTypeEnum machine, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity, string? anzahl)
         {
             this.expectedQuantity = expectedQuantity;
             string message;
@@ -67,11 +67,11 @@ namespace Aerotec.Data.Services
             Log.Write("^0!RC");
             if (anzahl != null)
             {
-                message = Jet3UpMessageBuilder.Start().Create().SetSize(size).Write(HTZ, signature, ANR, BTIDX, controllerId, anzahl).End();
+                message = Jet3UpMessageBuilder.Start().Create().SetSize(size, rotation, machine).Write(HTZ, signature, ANR, BTIDX, controllerId, anzahl).End();
             }
             else
             {
-                message = Jet3UpMessageBuilder.Start().Create().SetSize(size).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
+                message = Jet3UpMessageBuilder.Start().Create().SetSize(size, rotation, machine).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
             }
 
             Send(message);
@@ -111,7 +111,7 @@ namespace Aerotec.Data.Services
 
         private void ListenForResponses(CancellationToken cancellationToken)
         {
-            Thread.Sleep(1000);
+            Thread.Sleep(2000);
             byte[] buffer = new byte[15 + NumberOfDigitsInInt(expectedQuantity)]; // Adjust the buffer size as needed
             try
             {

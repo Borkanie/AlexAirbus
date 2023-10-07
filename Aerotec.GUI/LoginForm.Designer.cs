@@ -38,6 +38,7 @@ namespace Aerotec.GUI
             LoginUserName = new Label();
             pictureBox1 = new PictureBox();
             LoginUserComboBox = new ComboBox();
+            AddUsersButton = new Button();
             ((System.ComponentModel.ISupportInitialize)pictureBox1).BeginInit();
             SuspendLayout();
             // 
@@ -94,11 +95,22 @@ namespace Aerotec.GUI
             LoginUserComboBox.Size = new Size(171, 28);
             LoginUserComboBox.TabIndex = 0;
             // 
+            // AddUsersButton
+            // 
+            AddUsersButton.Location = new Point(381, 130);
+            AddUsersButton.Name = "AddUsersButton";
+            AddUsersButton.Size = new Size(33, 30);
+            AddUsersButton.TabIndex = 6;
+            AddUsersButton.Text = "+";
+            AddUsersButton.UseVisualStyleBackColor = true;
+            AddUsersButton.Click += addUserButton_Click;
+            // 
             // LoginForm
             // 
             AutoScaleDimensions = new SizeF(8F, 20F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(489, 368);
+            Controls.Add(AddUsersButton);
             Controls.Add(pictureBox1);
             Controls.Add(LoginUserName);
             Controls.Add(LoginIPLabel);
@@ -120,5 +132,6 @@ namespace Aerotec.GUI
         private Label LoginUserName;
         private PictureBox pictureBox1;
         private ComboBox LoginUserComboBox;
+        private Button AddUsersButton;
     }
 }

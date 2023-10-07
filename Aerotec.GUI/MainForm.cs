@@ -21,7 +21,7 @@ namespace Aerotec.GUI
         private TextBindingModel BTID = new();
         private TextBindingModel HTZ = new();
         private TextBindingModel ANR = new();
-        private bool DEBUG = false;
+        private bool DEBUG = true;
         private const int OriginalFontSize = 9;
         private bool sentFinal = false;
         private readonly Dictionary<Control, Tuple<Point, Size>> OriginalElements = new();
@@ -29,7 +29,7 @@ namespace Aerotec.GUI
         {
             InitializeComponent();
             LinkTextBoxes();
-            SetupFontSizeCombobox();
+            SetupComboBoxes();
 
             ControllerId.Content = logInInfo.User.Id;
             ControllerName.Content = logInInfo.User.Name;
@@ -68,7 +68,7 @@ namespace Aerotec.GUI
             CurrentQuantityTextBox.TextChanged += PrintedQuantityTextBox_TextChanged;
         }
 
-        private void SetupFontSizeCombobox()
+        private void SetupComboBoxes()
         {
             // Populate the ComboBox with enum values
             foreach (var size in Enum.GetValues(typeof(SizeEnum)))
@@ -76,6 +76,28 @@ namespace Aerotec.GUI
                 _ = SizeComboBox.Items.Add(size);
             }
             SizeComboBox.SelectedIndex = 1;
+
+            // Populate the ComboBox with enum values
+            foreach (var size in Enum.GetValues(typeof(MachineTypeEnum)))
+            {
+                _ = ComboBoxMachine.Items.Add(size);
+            }
+            ComboBoxMachine.SelectedIndex = 0;
+
+            var rotationArray = new int[]
+            {
+                0,
+                90,
+                180,
+                270
+            };
+
+            // Populate the ComboBox with enum values
+            foreach (var size in rotationArray)
+            {
+                _ = ComboBoxRotation.Items.Add(size);
+            }
+            ComboBoxRotation.SelectedIndex = 0;
         }
 
         private void SetUpResize()
@@ -141,14 +163,21 @@ namespace Aerotec.GUI
             }
             if (int.TryParse(ExpectedQuantityTxtBox.Text, out expected) && int.TryParse(CurrentQuantityTextBox.Text, out current))
             {
-                if (current == expected - 1)
+                if (current == expected)
                 {
-                    FinalComand();
+                    if ((MachineTypeEnum)ComboBoxMachine.SelectedItem == MachineTypeEnum.Neagra)
+                    {
+                        FinalComand();
+                    }
+                    else
+                    {
+                        ComandIsComplete();
+                    }
                     return;
                 }
                 else
                 {
-                    if (current > expected - 1)
+                    if (current > expected)
                     {
                         ComandIsComplete();
                     }
@@ -242,7 +271,7 @@ namespace Aerotec.GUI
         private void FinalComand()
         {
             StopWriting();
-            var dialog = MessageBox.Show("Doriti sa marcati finalul de comanda?", "Ultima piesa", MessageBoxButtons.YesNoCancel);
+            var dialog = MessageBox.Show("Doriti sa marcati finalul de comanda?", "Ultima piesa", MessageBoxButtons.YesNo);
             switch (dialog)
             {
                 case DialogResult.Yes:
@@ -250,11 +279,7 @@ namespace Aerotec.GUI
                     var formattedDate = currentDate.ToString("dd/MM/yyyy");
 
                     var anzahl = formattedDate + $" Anzahl Soll:{ExpectedQuantityTxtBox.Text} Ist:{CurrentQuantityTextBox.Text}";
-                    jet3UpClientService.StartWriting((FontSizeEnum)SizeComboBox.SelectedItem, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, 1, anzahl);
-                    sentFinal = true;
-                    return;
-                case DialogResult.No:
-                    jet3UpClientService.StartWriting((FontSizeEnum)SizeComboBox.SelectedItem, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, 1, null);
+                    jet3UpClientService.StartWriting((FontSizeEnum)SizeComboBox.SelectedItem, (int)ComboBoxRotation.SelectedItem, MachineTypeEnum.Neagra, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, 1, anzahl);
                     sentFinal = true;
                     return;
                 default:
@@ -332,14 +357,19 @@ namespace Aerotec.GUI
             ANRTextBox.Enabled = !start;
             if (start)
             {
+
+
                 jet3UpClientService.StartWriting((FontSizeEnum)SizeComboBox.SelectedItem,
-                                                HTZTextBox.Text,
-                                                SignatureTextBox.Text,
-                                                ANRTextBox.Text,
-                                                BTIDTextBox.Text,
-                                                ControllerIdTextBox.Text,
-                                                int.Parse(ExpectedQuantityTxtBox.Text) - 1,
-                                                null);
+                                                    (int)ComboBoxRotation.SelectedItem,
+                                                    (MachineTypeEnum)ComboBoxMachine.SelectedItem,
+                                                    HTZTextBox.Text,
+                                                    SignatureTextBox.Text,
+                                                    ANRTextBox.Text,
+                                                    BTIDTextBox.Text,
+                                                    ControllerIdTextBox.Text,
+                                                    int.Parse(ExpectedQuantityTxtBox.Text),
+                                                    null);
+
                 StartStopButton.BackColor = Color.Red;
                 StartStopButton.Text = "STOP";
             }
@@ -351,5 +381,6 @@ namespace Aerotec.GUI
             }
         }
         #endregion
+
     }
 }

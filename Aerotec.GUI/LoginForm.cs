@@ -1,21 +1,20 @@
 using Aerotec.Data.Factories;
 using Aerotec.Data.Model;
+using System;
 using System.Net;
+using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace Aerotec.GUI
 {
     public partial class LoginForm : Form
     {
         private List<string> comboBoxNames;
+        private EditUserForm editUserForm;
         public LoginForm()
         {
             InitializeComponent();
-
-            // Initialize the ComboBox with some initial data (if needed)
-            comboBoxNames = UserFactory.GetUserNames();
-
-            // Assign the DataSource
-            LoginUserComboBox.DataSource = comboBoxNames;
+            RefreshComboboxInput();
 
             // Setup keyu press event handler to deal with Not number characters
             LogInIPTextBox.KeyPress += LogInIPTextBox_KeyPress;
@@ -27,6 +26,18 @@ namespace Aerotec.GUI
             MaximizeBox = false;
 
             LoginUserComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
+        }
+
+        private void RefreshComboboxInput()
+        {
+            // Initialize the ComboBox with some initial data (if needed)
+            comboBoxNames = UserFactory.GetUserNames();
+
+            // Assign the DataSource
+            LoginUserComboBox.DataSource = comboBoxNames;
+
+            // Refresh the ComboBox
+            LoginUserComboBox.Refresh();
         }
 
         private void LoginButton_Click(object? sender, EventArgs e)
@@ -51,11 +62,11 @@ namespace Aerotec.GUI
                 Visible = false;
                 mainForm.Show();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 MessageBox.Show($"Eroare de conectare la masina \n{ex.Message}", "Eroare conectare", MessageBoxButtons.OK);
             }
-            
+
         }
 
         private void MainForm_FormClosed(object? sender, FormClosedEventArgs e)
@@ -72,5 +83,22 @@ namespace Aerotec.GUI
                 e.Handled = true;
             }
         }
+
+        private void addUserButton_Click(object sender, EventArgs e)
+        {
+            if(editUserForm == null)
+            {
+                editUserForm = new EditUserForm();
+                editUserForm.FormClosed += EditUserForm_FormClosed;
+            }
+            editUserForm.Show();
+        }
+
+        private void EditUserForm_FormClosed(object? sender, FormClosedEventArgs e)
+        {
+            RefreshComboboxInput();
+            editUserForm = null;
+        }
+
     }
 }
