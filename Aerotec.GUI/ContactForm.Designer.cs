@@ -43,6 +43,7 @@ namespace Aerotec.GUI
             ContactTextBox.ReadOnly = true;
             ContactTextBox.Size = new Size(382, 253);
             ContactTextBox.TabIndex = 0;
+            ContactTextBox.TextChanged += ContactTextBox_TextChanged;
             // 
             // ContactForm
             // 

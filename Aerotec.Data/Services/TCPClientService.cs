@@ -31,7 +31,6 @@ namespace Aerotec.Data.Services
         public void ContinueWriting()
         {
             Send("^0!GO");
-            Log.Write("^0!GO");
         }
 
         public bool IsConnected()
@@ -41,6 +40,7 @@ namespace Aerotec.Data.Services
 
         public void Send(string text, bool final = false)
         {
+            Log.Write(text);
             if (IsConnected())
             {
                 byte[] SENDBYTES = Encoding.ASCII.GetBytes(text + Constants.vbCrLf);
@@ -64,22 +64,14 @@ namespace Aerotec.Data.Services
             this.expectedQuantity = expectedQuantity;
             string message;
             Send("^0!RC");
-            Log.Write("^0!RC");
-            if (anzahl != null)
-            {
-                message = Jet3UpMessageBuilder.Start().Create().SetSize(size, rotation, machine).Write(HTZ, signature, ANR, BTIDX, controllerId, anzahl).End();
-            }
-            else
-            {
-                message = Jet3UpMessageBuilder.Start().Create().SetSize(size, rotation, machine).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
-            }
+            var jet3upMessageBuilder = Jet3UpMessageBuilder.Start().Create().SetSize(size, rotation, machine);
+            
+            message = (anzahl == null) ? jet3upMessageBuilder.Write(HTZ, signature, ANR, BTIDX, controllerId).End():
+                jet3upMessageBuilder.Write(HTZ, signature, ANR, BTIDX, controllerId, anzahl).End();
 
             Send(message);
-            Log.Write(message);
             Send("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999");
-            Log.Write("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999");
-            Send("^0!EQ");
-            Log.Write("^0!EQ");
+            Send("^0!GO");
             StartListening();
         }
 
@@ -93,7 +85,6 @@ namespace Aerotec.Data.Services
         {
             StopListening();
             Send("^0!ST");
-            Log.Write("^0!ST");
         }
 
         public void StartListening()
@@ -139,7 +130,6 @@ namespace Aerotec.Data.Services
                             ContinueWriting();
                         }
                         Jet3UpMessageHendler?.Invoke(this, new Jet3UpMessageHendlerEventArgs(Resources.Jet3UpStatusMessageType.Marked, response.Split('C')[2].Split('\t')[0]));
-                        Log.Write(response.Split('C')[2].Split('\t')[0]);
                     }
 
                 }
@@ -166,7 +156,6 @@ namespace Aerotec.Data.Services
             int bytesRead;
             string getCurrentIndex = "^0?CC";
             Send(getCurrentIndex);
-            Log.Write(getCurrentIndex);
             lock (client)
             {
                 bytesRead = tcpClientStream.Read(buffer, 0, buffer.Length);

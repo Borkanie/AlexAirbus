@@ -2,11 +2,11 @@
 {
     public static class Log
     {
-        private static bool DEBUG = false;
+        public static bool DEBUG = false;
         private static string file = "Log.txt";
         public static void Write(string text)
         {
-            if (!DEBUG)
+            if (DEBUG)
             {
                 if (!File.Exists(file))
                 {

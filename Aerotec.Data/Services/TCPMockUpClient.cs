@@ -5,6 +5,7 @@ using Aerotec.Data.Factories;
 using Aerotec.Data.Helper;
 using Aerotec.Data.Interface.Services;
 using Microsoft.VisualBasic;
+using System.Threading;
 
 namespace Aerotec.Data.Services
 {
@@ -49,6 +50,7 @@ namespace Aerotec.Data.Services
         public void ContinueWriting()
         {
             fileInterface.Write("ContinueWriting method called");
+            Send("^0!GO");
         }
 
         public bool IsConnected()
@@ -59,6 +61,7 @@ namespace Aerotec.Data.Services
 
         public void Send(string text, bool final = false)
         {
+            Log.Write(text);
             fileInterface.Write("Send method called with text: " + text);
             if (final)
             {
@@ -69,10 +72,19 @@ namespace Aerotec.Data.Services
         public void StartWriting(FontSizeEnum size, int rotation, MachineTypeEnum machine, string HTZ, string signature, string ANR, string BTIDX, string controllerId, int expectedQuantity, string? anzahl)
         {
             string message;
-            message = Jet3UpMessageBuilder.Start().Create().SetSize(FontSizeEnum.ISO1_5x3, rotation, machine).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
+            Send("^0!RC");
+            if (anzahl != null)
+            {
+                message = Jet3UpMessageBuilder.Start().Create().SetSize(size, rotation, machine).Write(HTZ, signature, ANR, BTIDX, controllerId, anzahl).End();
+            }
+            else
+            {
+                message = Jet3UpMessageBuilder.Start().Create().SetSize(size, rotation, machine).Write(HTZ, signature, ANR, BTIDX, controllerId).End();
+            }
+
             Send(message);
-            Send("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999" + Constants.vbCrLf);
-            Send("^0!EQ" + Constants.vbCrLf);
+            Send("^0=CC0" + Constants.vbTab + expectedQuantity.ToString() + Constants.vbTab + "3999");
+            Send("^0!GO");
             fileInterface.StartReading(expectedQuantity);
         }
 
@@ -80,6 +92,7 @@ namespace Aerotec.Data.Services
         {
             fileInterface.StopReading();
             fileInterface.Write("StopCommand method called");
+            Send("^0!ST");
         }
     }
 }

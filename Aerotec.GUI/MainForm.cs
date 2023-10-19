@@ -8,6 +8,7 @@ using Aerotec.Data.Resources;
 using Aerotec.Data.Services;
 using Aerotec.GUI.Resources.Helper;
 using Aerotec.GUI.ViewModel;
+using System.Security.Cryptography.Xml;
 
 namespace Aerotec.GUI
 {
@@ -20,8 +21,7 @@ namespace Aerotec.GUI
         private TextBindingModel ControllerName = new();
         private TextBindingModel BTID = new();
         private TextBindingModel HTZ = new();
-        private TextBindingModel ANR = new();
-        private bool DEBUG = true;
+        private TextBindingModel ANR = new();        
         private const int OriginalFontSize = 9;
         private bool sentFinal = false;
         private readonly Dictionary<Control, Tuple<Point, Size>> OriginalElements = new();
@@ -42,6 +42,9 @@ namespace Aerotec.GUI
 
         #region OnLoad
 
+        /// <summary>
+        /// Links up Text boxes to they're desired Dendent properties.
+        /// </summary>
         private void LinkTextBoxes()
         {
             _ = ControllerTextBox.DataBindings.Add("Text", ControllerName, nameof(TextBindingModel.Content), true, DataSourceUpdateMode.OnPropertyChanged);
@@ -51,15 +54,52 @@ namespace Aerotec.GUI
 
             _ = BTIDTextBox.DataBindings.Add("Text", BTID, nameof(TextBindingModel.Content), true, DataSourceUpdateMode.OnPropertyChanged);
             _ = DataBTIDTextBox.DataBindings.Add("Text", BTID, nameof(TextBindingModel.Content), true, DataSourceUpdateMode.OnPropertyChanged);
+            BTIDTextBox.PreviewKeyDown += Scannare_PreviewKey;
 
             _ = HTZTextBox.DataBindings.Add("Text", HTZ, nameof(TextBindingModel.Content), true, DataSourceUpdateMode.OnPropertyChanged);
             _ = DataHTZTextBox.DataBindings.Add("Text", HTZ, nameof(TextBindingModel.Content), true, DataSourceUpdateMode.OnPropertyChanged);
+            HTZTextBox.PreviewKeyDown += Scannare_PreviewKey;
 
             _ = ANRTextBox.DataBindings.Add("Text", ANR, nameof(TextBindingModel.Content), true, DataSourceUpdateMode.OnPropertyChanged);
             _ = DataANRTextBox.DataBindings.Add("Text", ANR, nameof(TextBindingModel.Content), true, DataSourceUpdateMode.OnPropertyChanged);
+            ANRTextBox.PreviewKeyDown += Scannare_PreviewKey;
 
         }
 
+        private void Scannare_PreviewKey(object? sender, PreviewKeyDownEventArgs e)
+        {
+
+
+            if (e.KeyValue <= 20 && e.KeyValue!=8)
+            {
+                if(sender == ANRTextBox)
+                {
+                    HTZTextBox.Focus();
+                    return;
+                }
+                if (sender == HTZTextBox)
+                {
+                    BTIDTextBox.Focus();
+                    return;
+                }
+                if (sender == BTIDTextBox)
+                {
+                    ExpectedQuantityTxtBox.Focus();
+                    return;
+                }
+                if (sender == ExpectedQuantityTxtBox)
+                {
+                    ANRTextBox.Focus();
+                    return;
+                }
+            }
+            
+        }
+
+        /// <summary>
+        /// Sets up quantity button and start button color and text.
+        /// Also links <see cref="CurrentQuantityTextBox.TextChanged"/> tp <see cref="PrintedQuantityTextBox_TextChanged(object?, EventArgs)"/>
+        /// </summary>
         private void SetUpQuantityButtonAndStartbutton()
         {
             CurrentQuantityTextBox.Text = "0";
@@ -68,6 +108,9 @@ namespace Aerotec.GUI
             CurrentQuantityTextBox.TextChanged += PrintedQuantityTextBox_TextChanged;
         }
 
+        /// <summary>
+        /// Fills up ComboBoxes with values and selects default index.
+        /// </summary>
         private void SetupComboBoxes()
         {
             // Populate the ComboBox with enum values
@@ -76,13 +119,16 @@ namespace Aerotec.GUI
                 _ = SizeComboBox.Items.Add(size);
             }
             SizeComboBox.SelectedIndex = 1;
+            SizeComboBox.DropDownStyle = ComboBoxStyle.DropDownList;
 
             // Populate the ComboBox with enum values
             foreach (var size in Enum.GetValues(typeof(MachineTypeEnum)))
             {
                 _ = ComboBoxMachine.Items.Add(size);
             }
-            ComboBoxMachine.SelectedIndex = 0;
+            ComboBoxMachine.SelectedIndex = 1;
+            ComboBoxMachine.DropDownStyle = ComboBoxStyle.DropDownList;
+
 
             var rotationArray = new int[]
             {
@@ -98,8 +144,13 @@ namespace Aerotec.GUI
                 _ = ComboBoxRotation.Items.Add(size);
             }
             ComboBoxRotation.SelectedIndex = 0;
+
+            ComboBoxRotation.DropDownStyle = ComboBoxStyle.DropDownList;
         }
 
+        /// <summary>
+        /// Configures linkage for resize of the UI.
+        /// </summary>
         private void SetUpResize()
         {
             MinimumSize = Size;
@@ -107,22 +158,27 @@ namespace Aerotec.GUI
             ResizeEnd += Form1_Resize;
         }
 
+        /// <summary>
+        /// Sets up connection to Jet3Up client.
+        /// </summary>
         private void StartJet3UpClient(LogInInformation logInInfo)
         {
-            if (!DEBUG)
+            if (Log.DEBUG)
             {
-                jet3UpClientService = new TCPClientService();
-
+                jet3UpClientService = new TCPMockUpClient();
             }
             else
             {
-                jet3UpClientService = new TCPMockUpClient();
+                jet3UpClientService = new TCPClientService();               
             }
             _ = jet3UpClientService.Connect(logInInfo.Address.ToString(), 3000);
             jet3UpClientService.Jet3UpMessageHendler += Jet3UpMessageHandler;
             jet3UpClientService.Jet3UpCommunicationInterrupted += Jet3UpClientService_Jet3UpCommunicationInterrupted;
         }
 
+        /// <summary>
+        /// Registeres the current size and location of a control as his minimum size and default location to be later used on resize.
+        /// </summary>
         private void SetMinim(Control control)
         {
             foreach (Control child in control.Controls)
@@ -141,6 +197,9 @@ namespace Aerotec.GUI
         #endregion
 
         #region Events
+        /// <summary>
+        /// An event handler that will be called each time the communication to the machine will be interrupted.
+        /// </summary>
         private void Jet3UpClientService_Jet3UpCommunicationInterrupted(object? sender, Jet3UpCommunicationInterruptedErrorEventArgs e)
         {
             if (jet3UpClientService is TCPClientService && e.ErrorWhenReading == false)
@@ -149,10 +208,19 @@ namespace Aerotec.GUI
             }
             _ = MessageBox.Show(this, $"Eroare de comunicare cu aparatul procesul a fost intrerupt cu eroare \n{e.Exception.Message}", "Eroare de comunicare", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
+
+        /// <summary>
+        /// Triggered each time <see cref="MainForm"/> finishes resizing.
+        /// </summary>
+        /// <param name="e">Contains information about the resize event.</param>
         private void Form1_Resize(object sender, EventArgs e)
         {
             ScaleControls();
         }
+
+        /// <summary>
+        /// Checks if last command has been reached.
+        /// </summary>
         private void PrintedQuantityTextBox_TextChanged(object? sender, EventArgs e)
         {
             int expected;
@@ -193,13 +261,20 @@ namespace Aerotec.GUI
             }
         }
 
+        /// <summary>
+        /// Only allows digits.
+        /// </summary>
         private void ExpectedQuantityTxtBox_KeyPress(object sender, KeyPressEventArgs e)
         {
-            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar))
+            if (!char.IsControl(e.KeyChar) && !char.IsDigit(e.KeyChar) && !(e.KeyChar == 16) && !(e.KeyChar == 20))
             {
                 e.Handled = true;
             }
         }
+
+        /// <summary>
+        /// An event handler that will interpret a message recieved by the <see cref="IClientService"/> used.
+        /// </summary>
         private void Jet3UpMessageHandler(object? sender, Jet3UpMessageHendlerEventArgs e)
         {
             if (e.Type == Jet3UpStatusMessageType.Error)
@@ -229,6 +304,9 @@ namespace Aerotec.GUI
             }
         }
 
+        /// <summary>
+        /// Show a small form with contact information for BLAJ.SA to allow for maintenance.
+        /// </summary>
         private void ContactButton_Click(object sender, EventArgs e)
         {
             if (contactForm == null)
@@ -243,15 +321,24 @@ namespace Aerotec.GUI
             }
         }
 
+        /// <summary>
+        /// An event that cloeses the connection to the jet3UpCLientService if it is still available.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void ContactForm_FormClosed(object? sender, FormClosedEventArgs e)
         {
-            contactForm = null;
-            if (jet3UpClientService is TCPClientService)
+            if(contactForm!= null)
             {
-                ((TCPClientService)jet3UpClientService).StopListening();
+                contactForm.Close();
             }
+            contactForm = null;
+            jet3UpClientService.StopCommand();
         }
 
+        /// <summary>
+        /// Changes the state of the applicaiton from working to waiting.
+        /// </summary>
         private void StartStopButton_Click(object sender, EventArgs e)
         {
             Working = !Working;
@@ -259,18 +346,27 @@ namespace Aerotec.GUI
         #endregion
 
         #region Helpers
+
+        /// <summary>
+        /// COmmand that will show a popup to the user that the application has finished orinting and that will reset UI elements.
+        /// </summary>
         private void ComandIsComplete()
         {
-            StopWriting();
+            jet3UpClientService.StopCommand();
             Working = false;
-            ResetUiElements();
+            StartStopButton.BackColor = Color.Green;
+            StartStopButton.Text = "START PRODUCTIE";
             CurrentQuantityTextBox.Text = "0";
             _ = MessageBox.Show("Comanda inscriptionata cu succes", "Success", MessageBoxButtons.OK, MessageBoxIcon.Exclamation);
         }
 
+        /// <summary>
+        /// Asks the user for permission and tries to print FinalCommand message using black ink settings.
+        /// It's only called when black ink is chosen.
+        /// </summary>
         private void FinalComand()
         {
-            StopWriting();
+            jet3UpClientService.StopCommand();
             var dialog = MessageBox.Show("Doriti sa marcati finalul de comanda?", "Ultima piesa", MessageBoxButtons.YesNo);
             switch (dialog)
             {
@@ -281,20 +377,64 @@ namespace Aerotec.GUI
                     var anzahl = formattedDate + $" Anzahl Soll:{ExpectedQuantityTxtBox.Text} Ist:{CurrentQuantityTextBox.Text}";
                     jet3UpClientService.StartWriting((FontSizeEnum)SizeComboBox.SelectedItem, (int)ComboBoxRotation.SelectedItem, MachineTypeEnum.Neagra, HTZTextBox.Text, SignatureTextBox.Text, ANRTextBox.Text, BTIDTextBox.Text, ControllerIdTextBox.Text, 1, anzahl);
                     sentFinal = true;
+                    var Stand = int.Parse(CurrentQuantityTextBox.Text) == int.Parse(ExpectedQuantityTxtBox.Text) ? "Fertig" : "Fahlend";
+                    //$"Auftrag                                  HTZ-Nr.                 Index           PKZ         Soll        Ist     Stand"
+                    WriteOnTxtFile($"{ANRTextBox.Text}                      {HTZTextBox.Text}                  {BTIDTextBox.Text}          {ControllerIdTextBox.Text}            {ExpectedQuantityTxtBox.Text}        {CurrentQuantityTextBox.Text}     {Stand}");
                     return;
                 default:
                     StartStopWorking(false);
                     return;
             }
         }
+
+        private void WriteOnTxtFile(string message)
+        {
+            try
+            {
+
+                string desktopPath = Environment.GetFolderPath(Environment.SpecialFolder.Desktop);
+                string currentDate = DateTime.Now.ToString("dd.MM.yyyy");
+                string filePath = Path.Combine(desktopPath, $"{currentDate}A.txt");
+                // Check if the file exists, and if not, create it
+                if (!File.Exists(filePath))
+                {
+                    using (StreamWriter writer = File.CreateText(filePath))
+                    {
+                        writer.WriteLine($"TargetsProtokill vom {currentDate}");
+                        writer.WriteLine($"Auftrag                                  HTZ-Nr.                 Index           PKZ         Soll        Ist     Stand");
+                        writer.WriteLine(message);
+                    }
+                }
+                else
+                {
+                    // If the file already exists, append to it
+                    using (StreamWriter writer = File.AppendText(filePath))
+                    {
+                        writer.WriteLine(message);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show($"An error occurred: {ex.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Scales up a given control with the same ration as the <see cref="MainForm"/>
+        /// </summary>
         private void ScaleControls()
         {
-            float scaleX = (float)this.Width / this.MinimumSize.Width;
-            float scaleY = (float)this.Height / this.MinimumSize.Height;
+            float scaleX = (float)Width / MinimumSize.Width;
+            float scaleY = (float)Height / MinimumSize.Height;
 
             ScaleControl(this, scaleX, scaleY);
         }
 
+        /// <summary>
+        /// Scales up and moves a control following a given scaling on each axis.
+        /// Will call himself recusively for each child with the same scaling.
+        /// </summary>
         private void ScaleControl(Control control, float scaleX, float scaleY)
         {
             foreach (Control child in control.Controls)
@@ -311,17 +451,9 @@ namespace Aerotec.GUI
             }
         }
 
-        private void ResetUiElements()
-        {
-            StartStopButton.BackColor = Color.Green;
-            StartStopButton.Text = "START PRODUCTIE";
-        }
-
-        private void StopWriting()
-        {
-            jet3UpClientService.StopCommand();
-        }
-
+        /// <summary>
+        /// Changes the applicaiton state from working to hold.
+        /// </summary>
         private bool Working
         {
             get
@@ -347,14 +479,20 @@ namespace Aerotec.GUI
             }
         }
 
+        /// <summary>
+        /// Enables or disables features in the UI depending on the state.
+        /// Sends start or stop message to <see cref="IClientService"/>.
+        /// </summary>
+        /// <param name="start">Desired state.</param>
         private void StartStopWorking(bool start)
         {
             sentFinal = false;
             SizeComboBox.Enabled = !start;
-            ControllerIdTextBox.Enabled = !start;
             HTZTextBox.Enabled = !start;
             BTIDTextBox.Enabled = !start;
             ANRTextBox.Enabled = !start;
+            ComboBoxMachine.Enabled = !start;
+            ComboBoxRotation.Enabled = !start;
             if (start)
             {
 
@@ -375,8 +513,12 @@ namespace Aerotec.GUI
             }
             else
             {
-                StopWriting();
-                ResetUiElements();
+                HTZTextBox.Text = "";
+                BTIDTextBox.Text = "";
+                ANRTextBox.Text = "";
+                jet3UpClientService.StopCommand();
+                StartStopButton.BackColor = Color.Green;
+                StartStopButton.Text = "START PRODUCTIE";
                 CurrentQuantityTextBox.Text = "0";
             }
         }

@@ -6,8 +6,6 @@
             "Ionescu Octavian - 0758.075.812\r\n" +
             "Stefan Cosmin -    0758.075.811\r\n" +
             "Militaru Andrei -  0745.186.686\r\n\r\n" +
-            "Departament IT\r\n" +
-            "Mihailov George - 0723.364.507\r\n\r\n" +
             "Comenzi \r\n" +
             "E-mail: office@blajsa.ro\r\n" +
             "Telefon : 031/423.14.11\r\n";
@@ -53,6 +51,11 @@
                 // Add some extra height for padding
                 return (int)preferredSize.Height + 20;
             }
+        }
+
+        private void ContactTextBox_TextChanged(object sender, EventArgs e)
+        {
+
         }
     }
 

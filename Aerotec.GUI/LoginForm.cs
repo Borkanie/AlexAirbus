@@ -86,7 +86,7 @@ namespace Aerotec.GUI
 
         private void addUserButton_Click(object sender, EventArgs e)
         {
-            if(editUserForm == null)
+            if (editUserForm == null)
             {
                 editUserForm = new EditUserForm();
                 editUserForm.FormClosed += EditUserForm_FormClosed;
@@ -100,5 +100,9 @@ namespace Aerotec.GUI
             editUserForm = null;
         }
 
+        private void LoginForm_Load(object sender, EventArgs e)
+        {
+
+        }
     }
 }
